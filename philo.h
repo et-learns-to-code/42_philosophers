@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/09 15:01:41 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/09 15:47:55 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <sys/time.h>
 
 # define ARGS_ERR 1
+# define MALLOC_ERR 2
 
 # define TAKEN_FORK "has taken a fork"
 # define EAT "is eating"
@@ -60,12 +61,12 @@ typedef struct s_data
 	long			time_to_die;
 	long			time_to_eat;
 	long			time_to_sleep;
-	int				nb_meals;
-	pthread_mutex_t	*forks;
+	int				nbr_meals;
+	long			simulation_start;
 	t_philo			*philos;
 }	t_data;
 
-void	correct_usage(void);
+int	correct_usage(void);
 int		check_args(int ac, char **av);
 int		args_not_digits(char **av);
 int		invalid_args(char **av);

@@ -1,7 +1,7 @@
 NAME = philo
 
 SRC = \
-	main.c utils.c
+	main.c args_check.c
 
 OBJ = ${SRC:.c=.o}
 

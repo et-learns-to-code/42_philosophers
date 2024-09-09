@@ -1,18 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   args_check.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 12:08:24 by etien             #+#    #+#             */
-/*   Updated: 2024/09/09 15:02:02 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/09 15:08:35 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	correct_usage(void)
+// This function will print out the correct usage and return
+// the ARGS_ERR code.
+int	correct_usage(void)
 {
 	printf("Correct usage:\n");
 	printf("./philo number_of_philosophers ");
@@ -24,6 +26,7 @@ void	correct_usage(void)
 at least 60ms.\n");
 	printf("4) [number_of_times_each_philosopher_must_eat] must be greater \
 than 0.\n");
+	return (ARGS_ERR);
 }
 
 // This function will check that the arguments are made up of digits
@@ -34,11 +37,11 @@ than 0.\n");
 int	check_args(int ac, char **av)
 {
 	if (ac < 5 || ac > 6)
-		return (ARGS_ERR);
+		return (1);
 	if (args_not_digits(av))
-		return (ARGS_ERR);
+		return (1);
 	if (invalid_args(av))
-		return (ARGS_ERR);
+		return (1);
 	return (0);
 }
 
@@ -87,7 +90,8 @@ int	invalid_args(char **av)
 	return (0);
 }
 
-// This function converts the ASCII numbers to their long integer values.
+// This function converts the ASCII numbers to their long values.
+// Long is used to avoid integer overflow.
 int	ft_atol(const char *str)
 {
 	long	result;
