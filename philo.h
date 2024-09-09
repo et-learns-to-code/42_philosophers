@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/09 12:08:08 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/09 15:01:41 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,23 @@
 # define PHILO_H
 
 // pthread, mutexes
-#include <pthread.h>
+# include <pthread.h>
 // printf
-#include <stdio.h>
+# include <stdio.h>
 // malloc, free
-#include <stdlib.h>
+# include <stdlib.h>
 // usleep
-#include <unistd.h>
+# include <unistd.h>
 // gettimeofday
-#include <sys/time.h>
+# include <sys/time.h>
 
-#define TAKEN_FORK "has taken a fork"
-#define EAT "is eating"
-#define SLEEP "is sleeping"
-#define THINK "is thinking"
-#define DIED "died"
+# define ARGS_ERR 1
+
+# define TAKEN_FORK "has taken a fork"
+# define EAT "is eating"
+# define SLEEP "is sleeping"
+# define THINK "is thinking"
+# define DIED "died"
 
 typedef enum e_philo_state
 {
@@ -38,6 +40,8 @@ typedef enum e_philo_state
 	DEAD,
 	FULL
 }	t_philo_state;
+
+typedef struct s_data	t_data;
 
 typedef struct s_philo
 {
@@ -52,7 +56,7 @@ typedef struct s_philo
 
 typedef struct s_data
 {
-	int				nb_philos;
+	int				nbr_philos;
 	long			time_to_die;
 	long			time_to_eat;
 	long			time_to_sleep;
@@ -60,5 +64,11 @@ typedef struct s_data
 	pthread_mutex_t	*forks;
 	t_philo			*philos;
 }	t_data;
+
+void	correct_usage(void);
+int		check_args(int ac, char **av);
+int		args_not_digits(char **av);
+int		invalid_args(char **av);
+int		ft_atol(const char *str);
 
 #endif
