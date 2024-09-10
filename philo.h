@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/09 18:34:00 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/10 12:00:07 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,15 @@
 # include <unistd.h>
 // gettimeofday
 # include <sys/time.h>
+// boolean data type
+# include <stdbool.h>
 
-# define TAKEN_FORK "has taken a fork"
-# define EAT "is eating"
-# define SLEEP "is sleeping"
-# define THINK "is thinking"
-# define DIED "died"
+
+# define TAKEN_FORK "has taken a fork\n"
+# define EAT "is eating\n"
+# define SLEEP "is sleeping\n"
+# define THINK "is thinking\n"
+# define DIED "died\n"
 
 typedef enum e_return
 {
@@ -38,15 +41,6 @@ typedef enum e_return
 	THREAD_CREATE_ERR,
 	THREAD_JOIN_ERR,
 }	t_return;
-
-typedef enum e_philo_state
-{
-	EATING,
-	SLEEPING,
-	THINKING,
-	DEAD,
-	FULL
-}	t_philo_state;
 
 typedef struct s_data	t_data;
 
@@ -58,8 +52,9 @@ typedef struct s_philo
 	long			last_meal;
 	pthread_mutex_t	left_fork;
 	pthread_mutex_t	right_fork;
+	pthread_mutex_t	full;
+	pthread_mutex_t	dead;
 	pthread_t		thread;
-	t_philo_state	philo_state;
 }	t_philo;
 
 typedef struct s_data
@@ -70,10 +65,10 @@ typedef struct s_data
 	long			time_to_sleep;
 	int				nbr_meals;
 	long			start_time;
+	bool			dead_philo;
 	t_philo			*philos;
-	pthread_t		death_monitor;
-	pthread_t		full_monitor;
-	pthread_mutex_t	print;
+	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	death_mutex;
 }	t_data;
 
 // Argument checking functions
@@ -86,6 +81,9 @@ int		ft_atol(const char *str);
 // Initialization functions
 int		data_init(t_data *data, char **av);
 void	philo_init(t_data *data);
+
+// Philosopher routine functions
+void	*philo_routine(void *arg);
 
 // Time functions
 long	timestamp(void);
