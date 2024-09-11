@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/11 13:58:14 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/11 15:21:36 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,20 @@ int		ft_atol(const char *str);
 
 // Initialization functions
 int		data_init(t_data *data, char **av);
+void	malloc_philos_forks(t_data *data);
 void	philo_init(t_data *data);
+void	run_simulation(t_data *data);
 
 // Philosopher routine functions
 void	*philo_routine(void *arg);
 void	philo_takes_forks(t_philo *philo);
 void	philo_eats(t_philo *philo);
 bool	is_philo_full(t_philo *philo);
+
+// Philosopher util functions
+void	print(t_philo *philo, char *msg);
+void	philo_thinks(t_philo *philo);
+void	philo_sleeps(t_philo *philo);
 
 // Death monitor functions
 void	*check_philo_death(void *arg);
@@ -99,10 +106,5 @@ void	update_death(t_philo *philo);
 // Time functions
 long	timestamp(void);
 void	ft_usleep(int ms);
-
-// Mutex variable functions
-void	print(t_philo *philo, char *msg);
-
-
 
 #endif

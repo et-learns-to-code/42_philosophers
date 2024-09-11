@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/11 13:49:06 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/11 15:16:12 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,6 @@ void *philo_routine(void *arg)
 		philo_sleeps(philo);
 	}
 	return (NULL);
-}
-
-void philo_sleeps(t_philo *philo)
-{
-	ft_usleep(philo->data->time_to_sleep);
-	print(philo, SLEEP);
-}
-
-// Philosophers will think in short bursts of time so long
-// as they are unable to acquire both forks.
-void philo_thinks(t_philo *philo)
-{
-	ft_usleep(10);
-	print(philo, THINK);
 }
 
 // The philosopher will attempt to lock the right fork.

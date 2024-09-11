@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/11 14:17:37 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/11 15:26:16 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // This function will initiate the variables in the data struct
 // by drawing from the command line arguments.
 // Only the philosophers struct will be malloced.
-int data_init(t_data *data, char **av)
+void data_init(t_data *data, char **av)
 {
 	data->nbr_philos = ft_atol(av[1]);
 	data->time_to_die = ft_atol(av[2]);
@@ -26,6 +26,15 @@ int data_init(t_data *data, char **av)
 	else
 		data->nbr_meals = -1;
 	data->dead_philo = false;
+	data->full_philos = 0;
+	malloc_philos_forks(data);
+	pthread_mutex_init(&data->print_mutex, NULL);
+	pthread_mutex_init(&data->death_mutex, NULL);
+	pthread_mutex_init(&data->full_mutex, NULL);
+}
+
+void malloc_philos_forks(t_data *data)
+{
 	data->philos = malloc(data->nbr_philos * sizeof(t_philo));
 	if (!data->philos)
 		return (MALLOC_ERR);
@@ -35,10 +44,6 @@ int data_init(t_data *data, char **av)
 		free(data->philos);
 		return (MALLOC_ERR);
 	}
-	pthread_mutex_init(&data->print_mutex, NULL);
-	pthread_mutex_init(&data->death_mutex, NULL);
-	pthread_mutex_init(&data->full_mutex, NULL);
-	return (0);
 }
 
 // This function will initiate the variables in all the philo structs.
@@ -73,6 +78,7 @@ void	run_simulation(t_data *data)
 {
 	int i;
 
+	data->start_time = timestamp();
 	i = 0;
 	while (i < data->nbr_philos)
 	{
@@ -84,9 +90,8 @@ void	run_simulation(t_data *data)
 	i = 0;
 	while (i < data->nbr_philos)
 	{
-		if (pthread_join(&data->philos[i].thread, NULL))
+		if (pthread_join(data->philos[i].thread, NULL))
 			return THREAD_JOIN_ERR;
 		i++;
 	}
-
 }
