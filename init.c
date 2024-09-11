@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/10 12:01:49 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/11 14:17:37 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,38 +23,45 @@ int data_init(t_data *data, char **av)
 	data->time_to_sleep = ft_atol(av[4]);
 	if (av[5])
 		data->nbr_meals = ft_atol(av[5]);
+	else
+		data->nbr_meals = -1;
 	data->dead_philo = false;
 	data->philos = malloc(data->nbr_philos * sizeof(t_philo));
 	if (!data->philos)
 		return (MALLOC_ERR);
+	data->forks = malloc(data->nbr_philos * sizeof(pthread_mutex_t));
+	if (!data->forks)
+	{
+		free(data->philos);
+		return (MALLOC_ERR);
+	}
 	pthread_mutex_init(&data->print_mutex, NULL);
 	pthread_mutex_init(&data->death_mutex, NULL);
+	pthread_mutex_init(&data->full_mutex, NULL);
 	return (0);
 }
 
 // This function will initiate the variables in all the philo structs.
-// Assignment of forks will be such that each philosopher's right fork
-// is the left fork of the philosopher after him.
-// Only the last philosopher's right fork is the left fork of the first
-// philosopher in order to simulate a circular seating arrangement.
-void philo_init(t_data *data);
+// Each philosopher's left fork will correspond to its i.
+// His right fork will correspond to (i + 1).
+// Modulus is used so that the last philosopher's right fork is fork[0]
+// to simulate a circular seating arrangement.
+void philo_init(t_data *data)
 {
 	int i;
+	int n;
 
 	i = 0;
-	while (i < data->nbr_philos)
+	n = data->nbr_philos;
+	while (i < n)
 	{
 		data->philos[i].data = data;
 		data->philos[i].id = i + 1;
-		data->philos[i].meals_eaten = 0;
 		data->philos[i].last_meal = 0;
-		pthread_mutex_init(&data->philos[i]->left_fork, NULL);
-		if (i == data->nbr_philos - 1)
-			data->philos[i].right_fork = data->philos[1].left_fork
-		else
-			data->philos[i].right_fork = data->philos[i + 1].left_fork;
-		pthread_mutex_init(&data->philos[i].full, NULL);
-		pthread_mutex_init(&data->philos[i].dead, NULL);
+		data->philos[i].meals_eaten = 0;
+		pthread_mutex_init(&data->forks[i], NULL);
+		data->philos[i].left_fork = &data->forks[i];
+		data->philos[i].right_fork = &data->forks[(i + 1) % n];
 		i++;
 	}
 	run_simulation(data);

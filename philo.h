@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/11 12:47:56 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/11 13:58:14 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ typedef struct s_philo
 	int				id;
 	long			last_meal;
 	int				meals_eaten;
-	pthread_mutex_t	left_fork;
-	pthread_mutex_t	right_fork;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
 	pthread_t		thread;
 }	t_philo;
 
@@ -69,6 +69,7 @@ typedef struct s_data
 	bool			dead_philo;
 	int				full_philos;
 	t_philo			*philos;
+	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	death_mutex;
 	pthread_mutex_t	full_mutex;

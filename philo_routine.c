@@ -6,14 +6,16 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/11 12:48:29 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/11 13:49:06 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// This function
 // The routine will follow the sequence of sleep > think > eat.
+// Thinking is the flexible part of the routine that will only
+// take place when a philosopher has to wait for the forks to be
+// available.
 // However, even-numbered philosophers will start out sleeping.
 // The staggered schedules will help to prevent a deadlock situation
 // when picking up the forks.
@@ -28,38 +30,64 @@ void *philo_routine(void *arg)
 	if (pthread_create(&death_monitor, NULL, check_philo_death, philo))
 		return THREAD_CREATE_ERR;
 	pthread_detach(&death_monitor);
+	if (philo->id % 2 == 0)
+		philo_sleeps(philo);
 	while (1)
 	{
-		if (philo->id % 2 == 0)
-		{
-			ft_usleep(philo->data->time_to_sleep);
-			print(philo, SLEEP);
-		}
 		philo_takes_forks(philo);
 		philo_eats(philo);
 		if (is_philo_full(philo))
 			break;
+		philo_sleeps(philo);
 	}
 	return (NULL);
 }
 
+void philo_sleeps(t_philo *philo)
+{
+	ft_usleep(philo->data->time_to_sleep);
+	print(philo, SLEEP);
+}
+
+// Philosophers will think in short bursts of time so long
+// as they are unable to acquire both forks.
+void philo_thinks(t_philo *philo)
+{
+	ft_usleep(10);
+	print(philo, THINK);
+}
+
+// The philosopher will attempt to lock the right fork.
+// If it is still occupied, he will reqlinquish both forks
+// and spend the time thinking instead.
 void philo_takes_forks(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->left_fork);
-	print(philo, TAKEN_FORK);
-	pthread_mutex_lock(&philo->right_fork);
-	print(philo, TAKEN_FORK);
+	while (1)
+	{
+		pthread_mutex_lock(&philo->left_fork);
+		if (pthread_mutex_lock(&philo->right_fork) == 0)
+		{
+			print(philo, TAKEN_FORK);
+			print(philo, TAKEN_FORK);
+			return;
+		}
+		pthread_mutex_unlock(&philo->left_fork);
+		philo_thinks(philo);
+	}
 }
 
 void philo_eats(t_philo *philo)
 {
 	print(philo, EAT);
 	philo->last_meal = timestamp();
-	philo->meals_eaten++;
+	philo->meals_eaten++;\
+	ft_usleep(philo->data->time_to_eat);
 	pthread_mutex_unlock(&philo->left_fork);
 	pthread_mutex_unlock(&philo->right_fork);
 }
 
+// The number of full philosophers has to be protected behind a mutex
+// because multiple threads will have access to this variable.
 bool is_philo_full(t_philo *philo)
 {
 	if (philo->meals_eaten == philo->data->nbr_meals)
