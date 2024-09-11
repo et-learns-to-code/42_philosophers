@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/10 12:00:07 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/11 12:47:56 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define SLEEP "is sleeping\n"
 # define THINK "is thinking\n"
 # define DIED "died\n"
+# define FULL "is full\n"
 
 typedef enum e_return
 {
@@ -44,19 +45,19 @@ typedef enum e_return
 
 typedef struct s_data	t_data;
 
+// variables specific to a single philosopher
 typedef struct s_philo
 {
 	t_data			*data;
 	int				id;
-	int				meals_eaten;
 	long			last_meal;
+	int				meals_eaten;
 	pthread_mutex_t	left_fork;
 	pthread_mutex_t	right_fork;
-	pthread_mutex_t	full;
-	pthread_mutex_t	dead;
 	pthread_t		thread;
 }	t_philo;
 
+// shared variables among all philosophers
 typedef struct s_data
 {
 	int				nbr_philos;
@@ -66,9 +67,11 @@ typedef struct s_data
 	int				nbr_meals;
 	long			start_time;
 	bool			dead_philo;
+	int				full_philos;
 	t_philo			*philos;
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	death_mutex;
+	pthread_mutex_t	full_mutex;
 }	t_data;
 
 // Argument checking functions
@@ -84,6 +87,13 @@ void	philo_init(t_data *data);
 
 // Philosopher routine functions
 void	*philo_routine(void *arg);
+void	philo_takes_forks(t_philo *philo);
+void	philo_eats(t_philo *philo);
+bool	is_philo_full(t_philo *philo);
+
+// Death monitor functions
+void	*check_philo_death(void *arg);
+void	update_death(t_philo *philo);
 
 // Time functions
 long	timestamp(void);

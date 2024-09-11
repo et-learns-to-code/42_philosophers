@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:48:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/09 16:28:25 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/11 10:33:44 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ long timestamp(void)
 // This function adapts the original usleep function to make the
 // sleep duration more acccurate.
 // The function will sleep for the majority of the sleep duration and
-// then fine tune the short interval (1 ms) until the thread is expected
+// then fine tune the short interval (1 second) until the thread is expected
 // to wake. This will minimize the overhead of multiple system calls.
 // 1 second is used as the threshold for the long sleep.
 // Keep in mind the parameter given is in milliseconds but usleep
