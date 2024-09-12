@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/11 15:26:16 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 10:33:06 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // This function will initiate the variables in the data struct
 // by drawing from the command line arguments.
 // Only the philosophers struct will be malloced.
-void data_init(t_data *data, char **av)
+void	data_init(t_data *data, char **av)
 {
 	data->nbr_philos = ft_atol(av[1]);
 	data->time_to_die = ft_atol(av[2]);
@@ -33,7 +33,7 @@ void data_init(t_data *data, char **av)
 	pthread_mutex_init(&data->full_mutex, NULL);
 }
 
-void malloc_philos_forks(t_data *data)
+void	malloc_philos_forks(t_data *data)
 {
 	data->philos = malloc(data->nbr_philos * sizeof(t_philo));
 	if (!data->philos)
@@ -51,10 +51,10 @@ void malloc_philos_forks(t_data *data)
 // His right fork will correspond to (i + 1).
 // Modulus is used so that the last philosopher's right fork is fork[0]
 // to simulate a circular seating arrangement.
-void philo_init(t_data *data)
+void	philo_init(t_data *data)
 {
-	int i;
-	int n;
+	int	i;
+	int	n;
 
 	i = 0;
 	n = data->nbr_philos;
@@ -76,22 +76,22 @@ void philo_init(t_data *data)
 // It will also rejoin the threads back with the main thread.
 void	run_simulation(t_data *data)
 {
-	int i;
+	int	i;
 
 	data->start_time = timestamp();
 	i = 0;
 	while (i < data->nbr_philos)
 	{
-		if (pthread_create(&data->philos[i].thread, NULL, philo_routine, &data->philos[i]))
-		// free resources
-			return THREAD_CREATE_ERR;
+		if (pthread_create(&data->philos[i].thread, NULL,
+				philo_routine, &data->philos[i]))
+			return (THREAD_CREATE_ERR);
 		i++;
 	}
 	i = 0;
 	while (i < data->nbr_philos)
 	{
 		if (pthread_join(data->philos[i].thread, NULL))
-			return THREAD_JOIN_ERR;
+			return (THREAD_JOIN_ERR);
 		i++;
 	}
 }

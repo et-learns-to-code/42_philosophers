@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/11 15:21:36 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 10:31:08 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 // boolean data type
 # include <stdbool.h>
 
-
 # define TAKEN_FORK "has taken a fork\n"
 # define EAT "is eating\n"
 # define SLEEP "is sleeping\n"
@@ -45,7 +44,7 @@ typedef enum e_return
 
 typedef struct s_data	t_data;
 
-// variables specific to a single philosopher
+// variables specific to a single philosopher thread
 typedef struct s_philo
 {
 	t_data			*data;
@@ -57,7 +56,7 @@ typedef struct s_philo
 	pthread_t		thread;
 }	t_philo;
 
-// shared variables among all philosophers
+// shared variables among all philosopher threads
 typedef struct s_data
 {
 	int				nbr_philos;
@@ -92,16 +91,18 @@ void	run_simulation(t_data *data);
 void	*philo_routine(void *arg);
 void	philo_takes_forks(t_philo *philo);
 void	philo_eats(t_philo *philo);
-bool	is_philo_full(t_philo *philo);
+void	philo_sleeps(t_philo *philo);
+void	philo_thinks(t_philo *philo);
 
 // Philosopher util functions
 void	print(t_philo *philo, char *msg);
-void	philo_thinks(t_philo *philo);
-void	philo_sleeps(t_philo *philo);
 
-// Death monitor functions
+// Simulation end functions
 void	*check_philo_death(void *arg);
-void	update_death(t_philo *philo);
+void	set_philo_dead(t_philo *philo);
+bool	any_philo_dead(t_philo *philo);
+bool	increment_full_philos(t_philo *philo);
+bool	all_philos_full(t_philo *philo);
 
 // Time functions
 long	timestamp(void);

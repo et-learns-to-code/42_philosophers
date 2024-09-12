@@ -1,7 +1,7 @@
 NAME = philo
 
 SRC = \
-	args_check.c death.c init.c main.c philo_routine.c time.c utils.c
+	args_check.c end_simulation.c init.c main.c philo_routine.c philo_utils.c time.c
 
 OBJ = ${SRC:.c=.o}
 

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:48:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/11 10:33:44 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 10:33:35 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@
 // the simulation.
 // This function will return the sum of the two variables, thereby
 // delivering the timestamp.
-long timestamp(void)
+long	timestamp(void)
 {
 	struct timeval	tv;
+
 	gettimeofday(&tv, NULL);
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
@@ -37,7 +38,7 @@ long timestamp(void)
 // 1 second is used as the threshold for the long sleep.
 // Keep in mind the parameter given is in milliseconds but usleep
 // takes place by the microseconds.
-void ft_usleep(int ms)
+void	ft_usleep(int ms)
 {
 	long	start_time;
 
@@ -47,5 +48,3 @@ void ft_usleep(int ms)
 	while (timestamp() - start_time < ms)
 		usleep(100);
 }
-
-
