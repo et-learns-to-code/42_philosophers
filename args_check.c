@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 12:08:24 by etien             #+#    #+#             */
-/*   Updated: 2024/09/09 15:08:35 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 10:45:59 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ than 0.\n");
 }
 
 // This function will check that the arguments are made up of digits
-// only and
+// only and that the argument values are valid.
 // The program can accept 4 (ac = 5) or 5 (ac = 6) arguments only.
 // Remember that the subject prohibits use of the exit function,
-// so returning the exit status is enough.
+// so returning is enough.
 int	check_args(int ac, char **av)
 {
 	if (ac < 5 || ac > 6)
@@ -88,29 +88,4 @@ int	invalid_args(char **av)
 		if (ft_atol(av[5]) == 0)
 			return (1);
 	return (0);
-}
-
-// This function converts the ASCII numbers to their long values.
-// Long is used to avoid integer overflow.
-int	ft_atol(const char *str)
-{
-	long	result;
-	int		sign;
-
-	result = 0;
-	sign = 1;
-	while ((*str >= 9 && *str <= 13) || *str == 32)
-		str++;
-	if (*str == '+' || *str == '-')
-	{
-		if (*str == '-')
-			sign = -1;
-		str++;
-	}
-	while (*str >= '0' && *str <= '9')
-	{
-		result = (result * 10) + (*str - '0');
-		str++;
-	}
-	return (sign * result);
 }

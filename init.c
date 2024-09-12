@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 10:33:06 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 10:48:20 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 // This function will initiate the variables in the data struct
 // by drawing from the command line arguments.
-// Only the philosophers struct will be malloced.
 void	data_init(t_data *data, char **av)
 {
 	data->nbr_philos = ft_atol(av[1]);
@@ -33,6 +32,8 @@ void	data_init(t_data *data, char **av)
 	pthread_mutex_init(&data->full_mutex, NULL);
 }
 
+// The philosopher structs and forks have to be malloc'd because
+// the number of philosophers is only known at runtime.
 void	malloc_philos_forks(t_data *data)
 {
 	data->philos = malloc(data->nbr_philos * sizeof(t_philo));
@@ -72,8 +73,9 @@ void	philo_init(t_data *data)
 	run_simulation(data);
 }
 
-// This function will create the threads for each philosopher and monitor.
-// It will also rejoin the threads back with the main thread.
+// This function will create the threads for each philosopher.
+// It will also rejoin the threads back with the main thread
+// after every thread has terminated.
 void	run_simulation(t_data *data)
 {
 	int	i;
