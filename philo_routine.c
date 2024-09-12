@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 16:00:26 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 17:31:36 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,15 @@ void	*philo_routine(void *arg)
 		return ("Thread create error");
 	pthread_detach(death_monitor);
 	if (philo->id % 2 == 0)
-	{
-		philo_sleeps(philo);
-		philo_thinks(philo);
-	}
-	while (!(any_philo_dead(philo) && !(all_philos_full(philo))))
+		ft_usleep(10);
+	while (!(any_philo_dead(philo)))
 	{
 		philo_eats(philo);
-		if (increment_full_philos(philo))
+		if (philo->meals_eaten == philo->data->nbr_meals)
+		{
+			print(philo, FULL);
 			break ;
+		}
 		philo_sleeps(philo);
 		philo_thinks(philo);
 	}

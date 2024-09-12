@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 15:11:02 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 17:20:11 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,11 @@ int	data_init(t_data *data, char **av)
 	else
 		data->nbr_meals = -1;
 	data->dead_philo = false;
-	data->full_philos = 0;
+	data->stop_simulation = false;
 	if (malloc_philos_forks(data))
 		return (MALLOC_ERR);
 	pthread_mutex_init(&data->print_mutex, NULL);
 	pthread_mutex_init(&data->death_mutex, NULL);
-	pthread_mutex_init(&data->full_mutex, NULL);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:10:42 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 16:09:36 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 17:38:22 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@
 // It has to be locked behind a mutex to prevent race conditions
 // if multiple threads try to call printf at the same time.
 // The function will check for simulation end conditions before printing
-// so that all printing ceases once a philosopher has died or
-// all philosophers are full.
+// so that all printing ceases once a philosopher has died.
 void	print(t_philo *philo, char *msg)
 {
 	pthread_mutex_lock(&philo->data->print_mutex);
-	printf("%ld %i %s", timestamp() - philo->data->start_time,
+	if (!philo->data->dead_philo)
+		printf("%ld %i %s", timestamp() - philo->data->start_time,
 			philo->id, msg);
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }

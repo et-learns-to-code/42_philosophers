@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:36:06 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 10:35:44 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 17:52:24 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,13 @@ void	*check_philo_death(void *arg)
 {
 	t_philo		*philo;
 	long		time_to_die;
-	long		current_time;
-	long		elapsed_time;
 
 	philo = (t_philo *) arg;
 	time_to_die = philo->data->time_to_die;
+	ft_usleep(time_to_die);
 	while (1)
 	{
-		current_time = timestamp();
-		elapsed_time = current_time - philo->last_meal;
-		if (elapsed_time > time_to_die)
+		if (timestamp() - philo->last_meal > time_to_die)
 		{
 			set_philo_dead(philo);
 			break ;
@@ -50,7 +47,14 @@ void	set_philo_dead(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->death_mutex);
 	philo->data->dead_philo = true;
-	print(philo, DIED);
+	if (!philo->data->stop_simulation)
+	{
+		pthread_mutex_lock(&philo->data->print_mutex);
+		printf("%ld %i %s", timestamp() - philo->data->start_time,
+			philo->id, DIED);
+		pthread_mutex_unlock(&philo->data->print_mutex);
+		philo->data->stop_simulation = true;
+	}
 	pthread_mutex_unlock(&philo->data->death_mutex);
 }
 
@@ -65,32 +69,4 @@ bool	any_philo_dead(t_philo *philo)
 	dead = philo->data->dead_philo;
 	pthread_mutex_unlock(&philo->data->death_mutex);
 	return (dead);
-}
-
-// This function will increment the full_philos count.
-// It is protected behind the full mutex.
-bool	increment_full_philos(t_philo *philo)
-{
-	if (philo->meals_eaten == philo->data->nbr_meals)
-	{
-		pthread_mutex_lock(&philo->data->full_mutex);
-		print(philo, FULL);
-		philo->data->full_philos++;
-		pthread_mutex_unlock(&philo->data->full_mutex);
-		return (true);
-	}
-	return (false);
-}
-
-// This function will check the full_philos count to decide
-// whether to continue the philosopher's routine or to terminate
-// the thread. It is protected behind the full mutex.
-bool	all_philos_full(t_philo *philo)
-{
-	bool	all_full;
-
-	pthread_mutex_lock(&philo->data->full_mutex);
-	all_full = (philo->data->full_philos == philo->data->nbr_philos);
-	pthread_mutex_unlock(&philo->data->full_mutex);
-	return (all_full);
 }

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 14:13:26 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 17:19:50 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,11 @@ typedef struct s_data
 	int				nbr_meals;
 	long			start_time;
 	bool			dead_philo;
-	int				full_philos;
+	bool			stop_simulation;
 	t_philo			*philos;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	death_mutex;
-	pthread_mutex_t	full_mutex;
 }	t_data;
 
 // Argument checking functions
@@ -96,8 +95,6 @@ void	philo_thinks(t_philo *philo);
 void	*check_philo_death(void *arg);
 void	set_philo_dead(t_philo *philo);
 bool	any_philo_dead(t_philo *philo);
-bool	increment_full_philos(t_philo *philo);
-bool	all_philos_full(t_philo *philo);
 
 // Util functions
 void	print(t_philo *philo, char *msg);
