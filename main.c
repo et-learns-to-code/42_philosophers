@@ -6,11 +6,23 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:33:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 14:56:34 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 15:10:33 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	print_data(t_data *data)
+{
+	printf("Number of Philosophers: %d\n", data->nbr_philos);
+	printf("Time to Die: %ld\n", data->time_to_die);
+	printf("Time to Eat: %ld\n", data->time_to_eat);
+	printf("Time to Sleep: %ld\n", data->time_to_sleep);
+	printf("Number of Meals: %d\n", data->nbr_meals);
+	printf("Dead Philosopher Flag: %s\n", data->dead_philo ? "true" : "false");
+	printf("Number of Full Philosophers: %d\n", data->full_philos);
+	printf("Start Time: %ld\n", data->start_time); // If start_time is initialized later, print it after that
+}
 
 int	main(int ac, char **av)
 {
@@ -23,6 +35,7 @@ int	main(int ac, char **av)
 		return (MALLOC_ERR);
 	data_init(data, av);
 	philo_init(data);
+	print_data(data);
 	run_simulation(data);
 	clean_up(data);
 	free(data);

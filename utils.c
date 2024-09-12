@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:10:42 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 14:45:09 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 16:09:36 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,8 @@
 void	print(t_philo *philo, char *msg)
 {
 	pthread_mutex_lock(&philo->data->print_mutex);
-	if (!(any_philo_dead(philo) && !(all_philos_full(philo))))
-	{
-		printf("%ld %i %s", timestamp() - philo->data->start_time,
+	printf("%ld %i %s", timestamp() - philo->data->start_time,
 			philo->id, msg);
-	}
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 

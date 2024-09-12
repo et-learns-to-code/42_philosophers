@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 14:40:25 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 16:00:26 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@ void	philo_eats(t_philo *philo)
 // The thread will then sleep for the specified sleeping time.
 void	philo_sleeps(t_philo *philo)
 {
-	ft_usleep(philo->data->time_to_sleep);
 	print(philo, SLEEP);
+	ft_usleep(philo->data->time_to_sleep);
 }
 
 // The thinking message will be printed for the philosopher.
