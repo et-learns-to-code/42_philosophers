@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 12:08:24 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 10:45:59 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 14:02:05 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ than 0.\n");
 // The program can accept 4 (ac = 5) or 5 (ac = 6) arguments only.
 // Remember that the subject prohibits use of the exit function,
 // so returning is enough.
-int	check_args(int ac, char **av)
+int	incorrect_args(int ac, char **av)
 {
 	if (ac < 5 || ac > 6)
 		return (1);

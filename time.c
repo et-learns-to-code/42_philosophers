@@ -6,22 +6,20 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:48:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 10:33:35 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 13:58:58 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// This function will facilitate calling of the gettimeofday function.
-// We feed a timeval struct to the function which will fill in the data
-// for us.
-// tv.tv_sec will be the number of seconds elapsed since the Unix epoch
-// tv.tv_usec will be the number of microseconds elapsed since the last
-// second.
-// *1000 and /1000 are to convert to the microseconds basis required by
-// the simulation.
+// This function will facilitate the calling of the gettimeofday function.
+// The function will fill in the data in the timeval struct.
+// tv.tv_sec = number of seconds elapsed since the Unix epoch
+// tv.tv_usec = number of microseconds elapsed since the last second.
+// * 1000 and / 1000 are to convert to the microseconds basis
+// required by the simulation.
 // This function will return the sum of the two variables, thereby
-// delivering the timestamp.
+// creating the timestamp.
 long	timestamp(void)
 {
 	struct timeval	tv;
@@ -32,12 +30,12 @@ long	timestamp(void)
 
 // This function adapts the original usleep function to make the
 // sleep duration more acccurate.
-// The function will sleep for the majority of the sleep duration and
-// then fine tune the short interval (1 second) until the thread is expected
+// The function will sleep for the majority of the time and fine tune
+// the short interval (1 second) before the thread is expected
 // to wake. This will minimize the overhead of multiple system calls.
-// 1 second is used as the threshold for the long sleep.
-// Keep in mind the parameter given is in milliseconds but usleep
-// takes place by the microseconds.
+// A sleep duration greater than 1 second is the threshold for the
+// long sleep. Keep in mind the parameter given to ft_usleep is in
+// milliseconds but usleep takes place by the microseconds.
 void	ft_usleep(int ms)
 {
 	long	start_time;

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 13:00:30 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 14:40:25 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philo *) arg;
 	if (pthread_create(&death_monitor, NULL, check_philo_death, philo))
-		return (THREAD_CREATE_ERR);
-	pthread_detach(&death_monitor);
+		return ("Thread create error");
+	pthread_detach(death_monitor);
 	if (philo->id % 2 == 0)
 	{
 		philo_sleeps(philo);
@@ -56,9 +56,9 @@ void	*philo_routine(void *arg)
 // to allow the next philosopher to pick up the forks.
 void	philo_eats(t_philo *philo)
 {
-	if (pthread_mutex_lock(&philo->left_fork) == 0)
+	if (pthread_mutex_lock(philo->left_fork) == 0)
 	{
-		if (pthread_mutex_lock(&philo->right_fork) == 0)
+		if (pthread_mutex_lock(philo->right_fork) == 0)
 		{
 			print(philo, TAKEN_FORK);
 			print(philo, TAKEN_FORK);
@@ -66,11 +66,11 @@ void	philo_eats(t_philo *philo)
 			philo->last_meal = timestamp();
 			philo->meals_eaten++;
 			ft_usleep(philo->data->time_to_eat);
-			pthread_mutex_unlock(&philo->left_fork);
-			pthread_mutex_unlock(&philo->right_fork);
+			pthread_mutex_unlock(philo->left_fork);
+			pthread_mutex_unlock(philo->right_fork);
 		}
 		else
-			pthread_mutex_unlock(&philo->left_fork);
+			pthread_mutex_unlock(philo->left_fork);
 	}
 }
 

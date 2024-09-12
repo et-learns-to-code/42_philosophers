@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 10:48:20 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 14:28:12 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // This function will initiate the variables in the data struct
 // by drawing from the command line arguments.
-void	data_init(t_data *data, char **av)
+int	data_init(t_data *data, char **av)
 {
 	data->nbr_philos = ft_atol(av[1]);
 	data->time_to_die = ft_atol(av[2]);
@@ -26,25 +26,25 @@ void	data_init(t_data *data, char **av)
 		data->nbr_meals = -1;
 	data->dead_philo = false;
 	data->full_philos = 0;
-	malloc_philos_forks(data);
+	if (malloc_philos_forks(data))
+		return (MALLOC_ERR);
 	pthread_mutex_init(&data->print_mutex, NULL);
 	pthread_mutex_init(&data->death_mutex, NULL);
 	pthread_mutex_init(&data->full_mutex, NULL);
+	return (0);
 }
 
 // The philosopher structs and forks have to be malloc'd because
 // the number of philosophers is only known at runtime.
-void	malloc_philos_forks(t_data *data)
+int	malloc_philos_forks(t_data *data)
 {
 	data->philos = malloc(data->nbr_philos * sizeof(t_philo));
 	if (!data->philos)
 		return (MALLOC_ERR);
 	data->forks = malloc(data->nbr_philos * sizeof(pthread_mutex_t));
 	if (!data->forks)
-	{
-		free(data->philos);
-		return (MALLOC_ERR);
-	}
+		return (free(data->philos), MALLOC_ERR);
+	return (0);
 }
 
 // This function will initiate the variables in all the philo structs.
@@ -70,13 +70,12 @@ void	philo_init(t_data *data)
 		data->philos[i].right_fork = &data->forks[(i + 1) % n];
 		i++;
 	}
-	run_simulation(data);
 }
 
 // This function will create the threads for each philosopher.
 // It will also rejoin the threads back with the main thread
 // after every thread has terminated.
-void	run_simulation(t_data *data)
+int	run_simulation(t_data *data)
 {
 	int	i;
 
@@ -96,4 +95,5 @@ void	run_simulation(t_data *data)
 			return (THREAD_JOIN_ERR);
 		i++;
 	}
+	return (0);
 }

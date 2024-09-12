@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:10:42 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 13:01:17 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 14:45:09 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,17 @@
 // It will include the timestamp, philo id and activity message.
 // It has to be locked behind a mutex to prevent race conditions
 // if multiple threads try to call printf at the same time.
+// The function will check for simulation end conditions before printing
+// so that all printing ceases once a philosopher has died or
+// all philosophers are full.
 void	print(t_philo *philo, char *msg)
 {
-	long	current_time;
-
-	if
 	pthread_mutex_lock(&philo->data->print_mutex);
-	current_time = timestamp();
-	printf("%ld %i %s", timestamp() - philo->data->start_time, philo->id, msg);
+	if (!(any_philo_dead(philo) && !(all_philos_full(philo))))
+	{
+		printf("%ld %i %s", timestamp() - philo->data->start_time,
+			philo->id, msg);
+	}
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
@@ -51,5 +54,3 @@ int	ft_atol(const char *str)
 	}
 	return (sign * result);
 }
-
-
