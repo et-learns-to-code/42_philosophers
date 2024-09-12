@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:36:06 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 17:52:24 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/12 18:11:21 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 // This function is run by the death monitor detached thread.
 // If a philosopher has died, its corresponding death monitor will
 // set the shared dead_philo flag to true.
-// It will check the death status and then sleep for 2ms to conserve
-// CPU resources. According to the subject, a philosopher's death has
-// to be reported within 10ms.
+// In the beginning, the thread will sleep until it is close to time_to_die.
+// Once awake, it runs a loop of periodically checking for death status
+// then sleeping for 2ms to conserve CPU resources.
+// According to the subject, a philosopher's death has to be reported
+// within 10ms.
 void	*check_philo_death(void *arg)
 {
 	t_philo		*philo;
@@ -40,6 +42,10 @@ void	*check_philo_death(void *arg)
 
 // This function will set the dead_philo boolean to true.
 // It is protected behind the death mutex.
+// printf is used here because print is set up to stop working
+// once a philosopher has died.
+// The stop_simulation boolean is also set so that only the death
+// of ONE philosopher is printed.
 // Whenever multiple threads have access to the same shared
 // variable, getting and setting functions for that variable
 // have to be locked behind a mutex to make it thread-safe.
