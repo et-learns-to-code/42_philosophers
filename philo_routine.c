@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/13 11:53:54 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/13 12:02:36 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 // have staggered schedules which will reduce the chances for deadlock.
 // A special check will sleep and terminate the routine if there is only
 // one philosopher since he has only one fork and will be unable to eat.
-// Once a philosopher has had all his meals, he will end his routine.
-// The philosopher will only repeat his routine so long as
-// the shared dead_philo flag has not been marked as true.
+// Once a philosopher is full (checked by philo_eats_and_check_full),
+// he will end his routine. The philosopher will only repeat his routine so
+// long as the shared dead_philo flag has not been marked as true.
 void	*philo_routine(void *arg)
 {
 	t_philo		*philo;
@@ -42,12 +42,8 @@ void	*philo_routine(void *arg)
 			ft_usleep(philo->data->time_to_die);
 			break ;
 		}
-		philo_eats(philo);
-		if (philo->meals_eaten == philo->data->nbr_meals)
-		{
-			print(philo, FULL);
+		if (philo_eats_and_check_full(philo))
 			break ;
-		}
 		philo_sleeps(philo);
 		philo_thinks(philo);
 	}
@@ -65,8 +61,9 @@ void	*philo_routine(void *arg)
 // Once the thread awakes, the philosopher's last meal timestamp
 // will be updated and his meals eaten count will be incremented.
 // The fork mutexes will then be unlocked to allow the next philosopher
-// to pick up the forks.
-void	philo_eats(t_philo *philo)
+// to pick up the forks. Finally, a boolean will be returned to indicate
+// whether the philosopher is full after eating his meal.
+bool	philo_eats_and_check_full(t_philo *philo)
 {
 	if (pthread_mutex_lock(philo->left_fork) == 0)
 	{
@@ -84,6 +81,12 @@ void	philo_eats(t_philo *philo)
 		else
 			pthread_mutex_unlock(philo->left_fork);
 	}
+	if (philo->meals_eaten == philo->data->nbr_meals)
+	{
+		print(philo, FULL);
+		return (true);
+	}
+	return (false);
 }
 
 // The sleeping message will be printed for the philosopher.
