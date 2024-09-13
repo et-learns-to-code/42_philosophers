@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   end_simulation.c                                   :+:      :+:    :+:   */
+/*   death.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:36:06 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 18:11:21 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/13 11:05:00 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	*check_philo_death(void *arg)
 	philo = (t_philo *) arg;
 	time_to_die = philo->data->time_to_die;
 	ft_usleep(time_to_die);
-	while (1)
+	while (philo->meals_eaten != philo->data->nbr_meals)
 	{
 		if (timestamp() - philo->last_meal > time_to_die)
 		{

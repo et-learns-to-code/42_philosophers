@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 17:31:36 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/13 11:24:19 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	*philo_routine(void *arg)
 	philo = (t_philo *) arg;
 	if (pthread_create(&death_monitor, NULL, check_philo_death, philo))
 		return ("Thread create error");
-	pthread_detach(death_monitor);
 	if (philo->id % 2 == 0)
 		ft_usleep(10);
 	while (!(any_philo_dead(philo)))
@@ -40,20 +39,21 @@ void	*philo_routine(void *arg)
 		philo_sleeps(philo);
 		philo_thinks(philo);
 	}
+	if (pthread_join(death_monitor, NULL))
+		return ("Thread join error");
 	return (NULL);
 }
 
 // The philosopher will attempt to take both forks.
-// If he succesfully takes the left fork but fails
-// to take the right fork, the left fork will be relinquished
-// to avoid a deadlock situation.
+// If he succesfully takes the left fork but fails to take the
+// right fork, the left fork will be relinquished to avoid a deadlock situation.
 // Once he is successful in taking the forks, the forks taken and
 // eating message will be printed for him.
-// His last meal timestamp will be updated and his meals eaten
-// count will be incremented.
 // The thread will then sleep for the specified eating time.
-// Once the thread awakes, the fork mutexes will be unlocked
-// to allow the next philosopher to pick up the forks.
+// Once the thread awakes, the philosopher's last meal timestamp
+// will be updated and his meals eaten count will be incremented.
+// The fork mutexes will then be unlocked to allow the next philosopher
+// to pick up the forks.
 void	philo_eats(t_philo *philo)
 {
 	if (pthread_mutex_lock(philo->left_fork) == 0)
@@ -63,9 +63,9 @@ void	philo_eats(t_philo *philo)
 			print(philo, TAKEN_FORK);
 			print(philo, TAKEN_FORK);
 			print(philo, EAT);
+			ft_usleep(philo->data->time_to_eat);
 			philo->last_meal = timestamp();
 			philo->meals_eaten++;
-			ft_usleep(philo->data->time_to_eat);
 			pthread_mutex_unlock(philo->left_fork);
 			pthread_mutex_unlock(philo->right_fork);
 		}
