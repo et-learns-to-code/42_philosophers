@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/13 11:59:07 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/13 12:14:31 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@
 # define SLEEP "is sleeping\n"
 # define THINK "is thinking\n"
 # define DIED "died\n"
-# define FULL "is full\n"
 
 typedef enum e_return
 {
