@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:33:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/12 17:15:50 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/13 14:50:59 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,6 @@ void	clean_up(t_data *data)
 	free(data->philos);
 	free(data->forks);
 	pthread_mutex_destroy(&data->print_mutex);
+	pthread_mutex_destroy(&data->meal_mutex);
 	pthread_mutex_destroy(&data->death_mutex);
 }

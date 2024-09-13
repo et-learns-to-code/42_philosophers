@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:36:06 by etien             #+#    #+#             */
-/*   Updated: 2024/09/13 11:05:00 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/13 15:19:05 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 // In the beginning, the thread will sleep until it is close to time_to_die.
 // Once awake, it runs a loop of periodically checking for death status
 // then sleeping for 2ms to conserve CPU resources.
+// The meal mutex has to be locked and unlocked because determination of
+// death will involve the last meal variable.
 // According to the subject, a philosopher's death has to be reported
 // within 10ms.
 void	*check_philo_death(void *arg)
@@ -28,13 +30,16 @@ void	*check_philo_death(void *arg)
 	philo = (t_philo *) arg;
 	time_to_die = philo->data->time_to_die;
 	ft_usleep(time_to_die);
-	while (philo->meals_eaten != philo->data->nbr_meals)
+	while (!philo_is_full(philo))
 	{
+		pthread_mutex_lock(&philo->data->meal_mutex);
 		if (timestamp() - philo->last_meal > time_to_die)
 		{
 			set_philo_dead(philo);
+			pthread_mutex_unlock(&philo->data->meal_mutex);
 			break ;
 		}
+		pthread_mutex_unlock(&philo->data->meal_mutex);
 		ft_usleep(2);
 	}
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/13 14:10:15 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/13 15:45:52 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,31 +58,39 @@ void	*philo_routine(void *arg)
 // Once he is successful in taking the forks, the forks taken and
 // eating message will be printed for him.
 // The thread will then sleep for the specified eating time.
-// Once the thread awakes, the philosopher's last meal timestamp
-// will be updated and his meals eaten count will be incremented.
-// The fork mutexes will then be unlocked to allow the next philosopher
+// Once the thread awakes, the meal mutex will be locked and the philosopher's
+// last meal timestamp and meals eaten count will be updated.
+// The meal and fork mutexes will then be unlocked to allow the next philosopher
 // to pick up the forks. Finally, a boolean will be returned to indicate
 // whether the philosopher is full after eating his meal.
 bool	philo_eats_and_check_full(t_philo *philo)
 {
-	if (pthread_mutex_lock(philo->left_fork) == 0)
-	{
-		if (pthread_mutex_lock(philo->right_fork) == 0)
-		{
-			print(philo, TAKEN_FORK);
-			print(philo, TAKEN_FORK);
-			print(philo, EAT);
-			ft_usleep(philo->data->time_to_eat);
-			philo->last_meal = timestamp();
-			philo->meals_eaten++;
-			pthread_mutex_unlock(philo->right_fork);
-			pthread_mutex_unlock(philo->left_fork);
-		}
-		else
-			pthread_mutex_unlock(philo->left_fork);
-	}
+	pthread_mutex_lock(philo->left_fork);
+	pthread_mutex_lock(philo->right_fork);
+	print(philo, TAKEN_FORK);
+	print(philo, TAKEN_FORK);
+	print(philo, EAT);
+	ft_usleep(philo->data->time_to_eat);
+	pthread_mutex_lock(&philo->data->meal_mutex);
+	philo->last_meal = timestamp();
+	philo->meals_eaten++;
+	pthread_mutex_unlock(&philo->data->meal_mutex);
+	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(philo->left_fork);
+	return (philo_is_full(philo));
+}
+
+// This function will check whether the philosopher is full
+// by accessing the meals_eaten variable through the meal mutex.
+bool	philo_is_full(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->meal_mutex);
 	if (philo->meals_eaten == philo->data->nbr_meals)
+	{
+		pthread_mutex_unlock(&philo->data->meal_mutex);
 		return (true);
+	}
+	pthread_mutex_unlock(&philo->data->meal_mutex);
 	return (false);
 }
 

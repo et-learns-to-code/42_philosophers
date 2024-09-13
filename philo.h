@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/13 12:14:31 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/13 15:21:20 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_data
 	t_philo			*philos;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	meal_mutex;
 	pthread_mutex_t	death_mutex;
 }	t_data;
 
@@ -87,10 +88,11 @@ int		run_simulation(t_data *data);
 // Philosopher routine functions
 void	*philo_routine(void *arg);
 bool	philo_eats_and_check_full(t_philo *philo);
+bool	philo_is_full(t_philo *philo);
 void	philo_sleeps(t_philo *philo);
 void	philo_thinks(t_philo *philo);
 
-// Simulation end functions
+// Death checking functions
 void	*check_philo_death(void *arg);
 void	set_philo_dead(t_philo *philo);
 bool	any_philo_dead(t_philo *philo);
