@@ -6,12 +6,18 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:33:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/13 14:50:59 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/13 17:25:21 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+// This is the main function of the program.
+// It will first check for incorrect arguments and return
+// the correct usage. The data and philo structs will be initialized
+// and the simulation will be run.
+// After the simulation terminates, all the previously malloc'd data
+// will be freed and the initialized mutexes destroyed.
 int	main(int ac, char **av)
 {
 	t_data	*data;
