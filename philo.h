@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/13 16:28:54 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/17 11:28:08 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,6 @@
 # define SLEEP "is sleeping\n"
 # define THINK "is thinking\n"
 # define DIED "died\n"
-
-typedef enum e_return
-{
-	SUCCESS,
-	ARGS_ERR,
-	MALLOC_ERR,
-	THREAD_CREATE_ERR,
-	THREAD_JOIN_ERR,
-}	t_return;
 
 typedef struct s_data	t_data;
 
@@ -74,10 +65,10 @@ typedef struct s_data
 }	t_data;
 
 // Argument checking functions
-int		correct_usage(void);
-int		incorrect_args(int ac, char **av);
-int		args_not_digits(char **av);
-int		invalid_args(char **av);
+void	correct_usage(void);
+bool	incorrect_args(int ac, char **av);
+bool	args_not_digits(char **av);
+bool	invalid_args(char **av);
 
 // Initialization functions
 int		data_init(t_data *data, char **av);
@@ -102,7 +93,7 @@ bool	any_philo_dead(t_philo *philo);
 
 // Util functions
 void	print(t_philo *philo, char *msg);
-int		ft_atol(const char *str);
+long	ft_atol(const char *str);
 
 // Time functions
 long	timestamp(void);

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/13 14:50:44 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/17 10:19:04 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	data_init(t_data *data, char **av)
 	data->dead_philo = false;
 	data->stop_simulation = false;
 	if (malloc_philos_forks(data))
-		return (MALLOC_ERR);
+		return (-1);
 	pthread_mutex_init(&data->print_mutex, NULL);
 	pthread_mutex_init(&data->meal_mutex, NULL);
 	pthread_mutex_init(&data->death_mutex, NULL);
@@ -40,10 +40,10 @@ int	malloc_philos_forks(t_data *data)
 {
 	data->philos = malloc(data->nbr_philos * sizeof(t_philo));
 	if (!data->philos)
-		return (MALLOC_ERR);
+		return (-1);
 	data->forks = malloc(data->nbr_philos * sizeof(pthread_mutex_t));
 	if (!data->forks)
-		return (free(data->philos), MALLOC_ERR);
+		return (free(data->philos), -1);
 	return (0);
 }
 
@@ -85,14 +85,14 @@ int	run_simulation(t_data *data)
 	{
 		if (pthread_create(&data->philos[i].thread, NULL,
 				philo_routine, &data->philos[i]))
-			return (THREAD_CREATE_ERR);
+			return (-1);
 		i++;
 	}
 	i = 0;
 	while (i < data->nbr_philos)
 	{
 		if (pthread_join(data->philos[i].thread, NULL))
-			return (THREAD_JOIN_ERR);
+			return (-1);
 		i++;
 	}
 	return (0);

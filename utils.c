@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:10:42 by etien             #+#    #+#             */
-/*   Updated: 2024/09/13 13:45:46 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/17 11:28:29 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,23 @@
 
 // This function prints out the status message for a given philosopher.
 // It will include the timestamp, philo id and activity message.
-// It has to be locked behind a mutex to prevent race conditions
-// if multiple threads try to call printf at the same time.
+// It has to be locked behind a mutex because printf is not thread-safe
+// and will not prevent concurrent access to the function.
+// Outputs from different threads can get mixed up if multiple threads
+// try to call printf at the same time.
 // The function will check for simulation end conditions before printing
 // so that all printing ceases once a philosopher has died.
 void	print(t_philo *philo, char *msg)
 {
 	pthread_mutex_lock(&philo->data->print_mutex);
-	if (!philo->data->dead_philo)
+	if (!any_philo_dead(philo))
 		printf("%ld %i %s", timestamp() - philo->data->start_time,
 			philo->id, msg);
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
 // This function converts the ASCII numbers to their long values.
-// Long is used to avoid integer overflow.
-int	ft_atol(const char *str)
+long	ft_atol(const char *str)
 {
 	long	result;
 	int		sign;

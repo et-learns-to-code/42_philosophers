@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/13 16:19:26 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/17 10:23:22 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philo *) arg;
 	if (pthread_create(&death_monitor, NULL, check_philo_death, philo))
-		return ("Thread create error");
+		return ((void *)-1);
 	if (philo->id % 2 == 0)
 		ft_usleep(10);
 	while (!(any_philo_dead(philo)))
@@ -48,6 +48,6 @@ void	*philo_routine(void *arg)
 		philo_thinks(philo);
 	}
 	if (pthread_join(death_monitor, NULL))
-		return ("Thread join error");
+		return ((void *)-1);
 	return (NULL);
 }
