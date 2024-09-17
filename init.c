@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/17 10:19:04 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/17 13:41:51 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 // by drawing from the command line arguments.
 int	data_init(t_data *data, char **av)
 {
-	data->nbr_philos = ft_atol(av[1]);
-	data->time_to_die = ft_atol(av[2]);
-	data->time_to_eat = ft_atol(av[3]);
-	data->time_to_sleep = ft_atol(av[4]);
+	data->nbr_philos = ft_atoi(av[1]);
+	data->time_to_die = ft_atoi(av[2]);
+	data->time_to_eat = ft_atoi(av[3]);
+	data->time_to_sleep = ft_atoi(av[4]);
 	if (av[5])
-		data->nbr_meals = ft_atol(av[5]);
+		data->nbr_meals = ft_atoi(av[5]);
 	else
 		data->nbr_meals = -1;
 	data->dead_philo = false;
@@ -34,16 +34,19 @@ int	data_init(t_data *data, char **av)
 	return (0);
 }
 
-// The philosopher structs and forks have to be malloc'd because
+// The philosopher structs and fork mutexes have to be malloc'd because
 // the number of philosophers is only known at runtime.
 int	malloc_philos_forks(t_data *data)
 {
-	data->philos = malloc(data->nbr_philos * sizeof(t_philo));
+	int	n;
+
+	n = data->nbr_philos;
+	data->philos = malloc(n * sizeof(t_philo));
 	if (!data->philos)
 		return (-1);
-	data->forks = malloc(data->nbr_philos * sizeof(pthread_mutex_t));
+	data->forks = malloc(n * sizeof(pthread_mutex_t));
 	if (!data->forks)
-		return (free(data->philos), -1);
+		return (-1);
 	return (0);
 }
 
@@ -78,10 +81,12 @@ void	philo_init(t_data *data)
 int	run_simulation(t_data *data)
 {
 	int	i;
+	int	n;
 
 	data->start_time = timestamp();
 	i = 0;
-	while (i < data->nbr_philos)
+	n = data->nbr_philos;
+	while (i < n)
 	{
 		if (pthread_create(&data->philos[i].thread, NULL,
 				philo_routine, &data->philos[i]))
@@ -89,7 +94,7 @@ int	run_simulation(t_data *data)
 		i++;
 	}
 	i = 0;
-	while (i < data->nbr_philos)
+	while (i < n)
 	{
 		if (pthread_join(data->philos[i].thread, NULL))
 			return (-1);

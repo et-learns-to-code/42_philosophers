@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 12:08:24 by etien             #+#    #+#             */
-/*   Updated: 2024/09/17 10:42:44 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/17 11:40:55 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,14 @@ bool	args_not_digits(char **av)
 // The function will return true if any of the arguments are invalid.
 bool	invalid_args(char **av)
 {
-	if (ft_atol(av[1]) < 1 || ft_atol(av[1]) > 200)
+	if (ft_atoi(av[1]) < 1 || ft_atoi(av[1]) > 200)
 		return (true);
-	if (ft_atol(av[2]) < 60
-		|| ft_atol(av[3]) < 60
-		|| ft_atol(av[4]) < 60)
+	if (ft_atoi(av[2]) < 60
+		|| ft_atoi(av[3]) < 60
+		|| ft_atoi(av[4]) < 60)
 		return (true);
 	if (av[5])
-		if (ft_atol(av[5]) == 0)
+		if (ft_atoi(av[5]) == 0)
 			return (true);
 	return (false);
 }

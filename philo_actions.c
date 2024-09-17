@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:19:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/13 16:42:51 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/17 14:04:55 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 // The philosopher will attempt to take both forks.
 // Depending on whether philo id is odd or even, the philosophers
-// will have different orders in picking up the forks in order to
-// avoid deadlock. After the philosopher is done eating, the fork mutexes
+// will lock the forks in different orders in order to avoid deadlock.
+// After the philosopher is done eating, the fork mutexes
 // will be unlocked to allow the next philosopher to pick up the forks.
 // Finally, a boolean will be returned to indicate
 // whether the philosopher is full after having his meal.
@@ -45,11 +45,14 @@ bool	philo_eats_and_check_full(t_philo *philo)
 	return (philo_is_full(philo));
 }
 
-// Once the philosopher is successful in taking the forks, the forks
-// taken and eating message will be printed for him.
+// Once the philosopher is successful in taking the forks,
+// the forks taken and eating message will be printed for him.
 // The meal mutex will be locked and the philosopher's last meal timestamp
 // and meals eaten count will be updated. The meal mutex will be unlocked.
 // The thread will then sleep for the specified eating time.
+// In the subject, time_to_die is measured from the "beginning of their
+// last meal", so last_meal timestamp is updated before making
+// the thread sleep.
 void	philo_is_eating(t_philo *philo)
 {
 	print(philo, TAKEN_FORK);

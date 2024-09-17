@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/17 10:23:22 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/17 13:51:56 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 // the first round of eating. From then on, the philosophers will
 // have staggered schedules which will reduce the chances for deadlock.
 // A special check will sleep and terminate the routine if there is only
-// one philosopher since he has only one fork and will be unable to eat.
+// one philosopher since he will have only one fork and will be unable to eat.
 // Once a philosopher is full (checked by philo_eats_and_check_full),
 // he will end his routine. The philosopher will only repeat his routine so
 // long as the shared dead_philo flag has not been marked as true.
@@ -30,7 +30,7 @@ void	*philo_routine(void *arg)
 	t_philo		*philo;
 	pthread_t	death_monitor;
 
-	philo = (t_philo *) arg;
+	philo = (t_philo *)arg;
 	if (pthread_create(&death_monitor, NULL, check_philo_death, philo))
 		return ((void *)-1);
 	if (philo->id % 2 == 0)

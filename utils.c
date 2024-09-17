@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:10:42 by etien             #+#    #+#             */
-/*   Updated: 2024/09/17 11:28:29 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/17 14:18:25 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,15 @@ void	print(t_philo *philo, char *msg)
 {
 	pthread_mutex_lock(&philo->data->print_mutex);
 	if (!any_philo_dead(philo))
-		printf("%ld %i %s", timestamp() - philo->data->start_time,
+		printf("%lld %i %s", timestamp() - philo->data->start_time,
 			philo->id, msg);
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
-// This function converts the ASCII numbers to their long values.
-long	ft_atol(const char *str)
+// This function converts the ASCII numbers to their integer values.
+int	ft_atoi(const char *str)
 {
-	long	result;
+	int		result;
 	int		sign;
 
 	result = 0;
