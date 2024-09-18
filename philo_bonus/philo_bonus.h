@@ -6,13 +6,17 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/18 10:19:37 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/18 11:51:51 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_BONUS_H
 # define PHILO_BONUS_H
 
+// semaphores
+# include <semaphore.h>
+// oflag for sem_open
+# include <fcntl.h>
 // pthread, mutexes
 # include <pthread.h>
 // printf
@@ -45,7 +49,7 @@ typedef struct s_data
 	bool			dead_philo;
 	bool			stop_simulation;
 	t_philo			*philos;
-	pthread_mutex_t	*forks;
+	sem_t			*forks_sem;
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	meal_mutex;
 	pthread_mutex_t	death_mutex;
@@ -59,8 +63,6 @@ typedef struct s_philo
 	int				id;
 	long long		last_meal;
 	int				meals_eaten;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
 	pthread_t		thread;
 }	t_philo;
 
@@ -72,7 +74,7 @@ bool		invalid_args(char **av);
 
 // Initialization functions
 int			data_init(t_data *data, char **av);
-int			malloc_philos_forks(t_data *data);
+int			malloc_philos(t_data *data);
 void		philo_init(t_data *data);
 int			run_simulation(t_data *data);
 
