@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/18 11:51:51 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/18 14:03:01 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ typedef struct s_data
 	bool			stop_simulation;
 	t_philo			*philos;
 	sem_t			*forks_sem;
-	pthread_mutex_t	print_mutex;
-	pthread_mutex_t	meal_mutex;
-	pthread_mutex_t	death_mutex;
+	sem_t			*print_sem;
+	sem_t			*meal_sem;
+	sem_t			*death_sem;
 	long long		start_time;
 }	t_data;
 

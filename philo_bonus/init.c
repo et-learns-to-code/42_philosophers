@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/18 11:52:47 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/18 14:03:18 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 // This function will initialize the variables in the data struct
 // by drawing from the command line arguments.
+// sem_open requires a semaphore name to enable communication between
+// different processes becauses processes do not share the same
+// memory space.
+// 0644 permissions enables read and write for owner while others can
+// only read - often the default setting to protect shared resources.
 int	data_init(t_data *data, char **av)
 {
 	data->nbr_philos = ft_atoi(av[1]);
@@ -26,12 +31,12 @@ int	data_init(t_data *data, char **av)
 		data->nbr_meals = -1;
 	data->dead_philo = false;
 	data->stop_simulation = false;
-	if (malloc_philos_forks(data))
+	if (malloc_philos(data))
 		return (-1);
 	data->forks_sem = sem_open("/forks", O_CREAT, 0644, data->nbr_philos);
-	pthread_mutex_init(&data->print_mutex, NULL);
-	pthread_mutex_init(&data->meal_mutex, NULL);
-	pthread_mutex_init(&data->death_mutex, NULL);
+	data->print_sem = sem_open("/print", O_CREAT, 0644, 1);
+	data->meal_sem = sem_open("/meal", O_CREAT, 0644, 1);
+	data->death_sem = sem_open("/death", O_CREAT, 0644, 1);
 	return (0);
 }
 

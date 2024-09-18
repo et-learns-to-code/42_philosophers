@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:36:06 by etien             #+#    #+#             */
-/*   Updated: 2024/09/18 11:09:56 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/18 14:17:46 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ void	*check_philo_death(void *arg)
 	ft_usleep(time_to_die);
 	while (!philo_is_full(philo))
 	{
-		pthread_mutex_lock(&philo->data->meal_mutex);
+		sem_wait(philo->data->meal_sem);
 		if (timestamp() - philo->last_meal > time_to_die)
 		{
 			set_philo_dead(philo);
-			pthread_mutex_unlock(&philo->data->meal_mutex);
+			sem_post(philo->data->meal_sem);
 			break ;
 		}
-		pthread_mutex_unlock(&philo->data->meal_mutex);
+		sem_post(philo->data->meal_sem);
 		ft_usleep(2);
 	}
 	return (NULL);
@@ -56,17 +56,17 @@ void	*check_philo_death(void *arg)
 // have to be locked behind a mutex to make it thread-safe.
 void	set_philo_dead(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data->death_mutex);
+	sem_wait(philo->data->death_sem);
 	philo->data->dead_philo = true;
 	if (!philo->data->stop_simulation)
 	{
-		pthread_mutex_lock(&philo->data->print_mutex);
+		sem_wait(philo->data->print_sem);
 		printf("%lld %i %s", timestamp() - philo->data->start_time,
 			philo->id, DIED);
-		pthread_mutex_unlock(&philo->data->print_mutex);
+		sem_post(philo->data->print_sem);
 		philo->data->stop_simulation = true;
 	}
-	pthread_mutex_unlock(&philo->data->death_mutex);
+	sem_post(philo->data->death_sem);
 }
 
 // This function will check the dead_philo boolean to decide
@@ -78,8 +78,8 @@ bool	any_philo_dead(t_philo *philo)
 {
 	bool	dead;
 
-	pthread_mutex_lock(&philo->data->death_mutex);
+	sem_wait(philo->data->death_sem);
 	dead = philo->data->dead_philo;
-	pthread_mutex_unlock(&philo->data->death_mutex);
+	sem_post(philo->data->death_sem);
 	return (dead);
 }

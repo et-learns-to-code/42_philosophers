@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:33:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/18 11:10:10 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/18 14:12:54 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,13 @@ void	clean_up(t_data *data)
 
 	i = 0;
 	n = data->nbr_philos;
-	while (i < n)
-	{
-		pthread_mutex_destroy(&data->forks[i]);
-		i++;
-	}
 	free(data->philos);
-	free(data->forks);
-	pthread_mutex_destroy(&data->print_mutex);
-	pthread_mutex_destroy(&data->meal_mutex);
-	pthread_mutex_destroy(&data->death_mutex);
+	sem_close(data->forks_sem);
+	sem_close(data->print_sem);
+	sem_close(data->meal_sem);
+	sem_close(data->death_sem);
+	sem_unlink("/forks");
+	sem_unlink("/print");
+	sem_unlink("/meal");
+	sem_unlink("/death");
 }

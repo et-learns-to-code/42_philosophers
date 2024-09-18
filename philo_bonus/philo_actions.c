@@ -6,42 +6,25 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:19:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/18 11:10:15 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/18 14:18:29 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-// The philosopher will attempt to take both forks.
-// Depending on whether philo id is odd or even, the philosophers
-// will lock the forks in different orders in order to avoid deadlock.
-// After the philosopher is done eating, the fork mutexes
-// will be unlocked to allow the next philosopher to pick up the forks.
+// The philosopher will attempt to take both forks and decrease
+// the forks semaphore.
+// After the philosopher is done eating, the forks semaphore will
+// be increased to allow the next philosopher to pick up the forks.
 // Finally, a boolean will be returned to indicate
 // whether the philosopher is full after having his meal.
 bool	philo_eats_and_check_full(t_philo *philo)
 {
-	if (philo->id % 2 == 0)
-	{
-		pthread_mutex_lock(philo->right_fork);
-		pthread_mutex_lock(philo->left_fork);
-	}
-	else
-	{
-		pthread_mutex_lock(philo->left_fork);
-		pthread_mutex_lock(philo->right_fork);
-	}
+	sem_wait(philo->data->forks_sem);
+	sem_wait(philo->data->forks_sem);
 	philo_is_eating(philo);
-	if (philo->id % 2 == 0)
-	{
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
-	}
-	else
-	{
-		pthread_mutex_unlock(philo->right_fork);
-		pthread_mutex_unlock(philo->left_fork);
-	}
+	sem_post(philo->data->forks_sem);
+	sem_post(philo->data->forks_sem);
 	return (philo_is_full(philo));
 }
 
@@ -58,10 +41,10 @@ void	philo_is_eating(t_philo *philo)
 	print(philo, TAKEN_FORK);
 	print(philo, TAKEN_FORK);
 	print(philo, EAT);
-	pthread_mutex_lock(&philo->data->meal_mutex);
+	sem_wait(philo->data->meal_sem);
 	philo->last_meal = timestamp();
 	philo->meals_eaten++;
-	pthread_mutex_unlock(&philo->data->meal_mutex);
+	sem_post(philo->data->meal_sem);
 	ft_usleep(philo->data->time_to_eat);
 }
 
@@ -69,13 +52,13 @@ void	philo_is_eating(t_philo *philo)
 // by accessing the meals_eaten variable through the meal mutex.
 bool	philo_is_full(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data->meal_mutex);
+	sem_wait(philo->data->meal_sem);
 	if (philo->meals_eaten == philo->data->nbr_meals)
 	{
-		pthread_mutex_unlock(&philo->data->meal_mutex);
+		sem_post(philo->data->meal_sem);
 		return (true);
 	}
-	pthread_mutex_unlock(&philo->data->meal_mutex);
+	sem_post(philo->data->meal_sem);
 	return (false);
 }
 
