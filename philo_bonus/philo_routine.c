@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/18 11:10:25 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/21 10:59:29 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,10 @@
 // Once a philosopher is full (checked by philo_eats_and_check_full),
 // he will end his routine. The philosopher will only repeat his routine so
 // long as the shared dead_philo flag has not been marked as true.
-void	*philo_routine(void *arg)
+void	*philo_routine(t_philo *philo)
 {
-	t_philo		*philo;
 	pthread_t	death_monitor;
 
-	philo = (t_philo *)arg;
 	if (pthread_create(&death_monitor, NULL, check_philo_death, philo))
 		return ((void *)-1);
 	if (philo->id % 2 == 0)

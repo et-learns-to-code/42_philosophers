@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/18 14:03:01 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/21 11:33:09 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,10 @@ int			data_init(t_data *data, char **av);
 int			malloc_philos(t_data *data);
 void		philo_init(t_data *data);
 int			run_simulation(t_data *data);
+void		fork_philos(t_data *data, int i, pid_t *philos_pid);
 
 // Philosopher routine function
-void		*philo_routine(void *arg);
+void		*philo_routine(t_philo *philo);
 
 // Philosopher actions functions
 bool		philo_eats_and_check_full(t_philo *philo);

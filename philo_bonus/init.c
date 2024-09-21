@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/18 14:03:18 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/21 12:00:59 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,31 +75,53 @@ void	philo_init(t_data *data)
 // This function will initialize the simulation start time and
 // each philosopher's last_meal time (which should be the start
 // of the simulation).
-// It will then create the threads for each philosopher.
-// It will also rejoin the threads back with the main thread
-// after every thread has terminated.
+// It will fork a child process for each philosopher.
+// Each child process will have its own memory space.
+// waitpid will wait for each child to finish.
 int	run_simulation(t_data *data)
 {
-	int	i;
-	int	n;
+	int		i;
+	pid_t	*philos_pid;
 
+	philos_pid = malloc(data->nbr_philos * sizeof(pid_t));
+	if (!philos_pid)
+		return (-1);
 	data->start_time = timestamp();
 	i = 0;
-	n = data->nbr_philos;
-	while (i < n)
+	while (i < data->nbr_philos)
 	{
 		data->philos[i].last_meal = data->start_time;
-		if (pthread_create(&data->philos[i].thread, NULL,
-				philo_routine, &data->philos[i]))
-			return (-1);
+		fork_philos(data, i, philos_pid);
 		i++;
 	}
 	i = 0;
-	while (i < n)
+	while (i < data->nbr_philos)
 	{
-		if (pthread_join(data->philos[i].thread, NULL))
-			return (-1);
+		waitpid(philos_pid[i], NULL, 0);
 		i++;
 	}
+	free(philos_pid);
 	return (0);
+}
+
+// This function forks the process for each philosopher.
+// The child process created will run the philo_routine function.
+// exit(0) is necessary to cleanly terminate the child.
+// The parent process will keep track of all the children pid
+// with the help of an array.
+// If an error occurs, the program will exit with status 1.
+void	fork_philos(t_data *data, int i, pid_t *philos_pid)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		philo_routine(&data->philos[i]);
+		exit(0);
+	}
+	else if (pid > 0)
+		philos_pid[i] = pid;
+	else
+		exit(1);
 }
