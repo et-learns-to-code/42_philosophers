@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/21 11:33:09 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/21 16:25:44 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,17 @@
 # include <semaphore.h>
 // oflag for sem_open
 # include <fcntl.h>
-// pthread, mutexes
+// waitpid
+# include <sys/wait.h>
+// SIGTERM
+# include <signal.h>
+// pthread
 # include <pthread.h>
 // printf
 # include <stdio.h>
 // malloc, free
 # include <stdlib.h>
-// usleep
+// fork, usleep
 # include <unistd.h>
 // gettimeofday
 # include <sys/time.h>
@@ -46,8 +50,6 @@ typedef struct s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				nbr_meals;
-	bool			dead_philo;
-	bool			stop_simulation;
 	t_philo			*philos;
 	sem_t			*forks_sem;
 	sem_t			*print_sem;
@@ -61,9 +63,8 @@ typedef struct s_philo
 {
 	t_data			*data;
 	int				id;
-	long long		last_meal;
 	int				meals_eaten;
-	pthread_t		thread;
+	long long		last_meal;
 }	t_philo;
 
 // Argument checking functions
@@ -76,8 +77,11 @@ bool		invalid_args(char **av);
 int			data_init(t_data *data, char **av);
 int			malloc_philos(t_data *data);
 void		philo_init(t_data *data);
+
+// Simulation start and end functions
 int			run_simulation(t_data *data);
 void		fork_philos(t_data *data, int i, pid_t *philos_pid);
+void		recover_philos(t_data *data, pid_t *philos_pid);
 
 // Philosopher routine function
 void		*philo_routine(t_philo *philo);
@@ -91,8 +95,6 @@ void		philo_thinks(t_philo *philo);
 
 // Death checking functions
 void		*check_philo_death(void *arg);
-void		set_philo_dead(t_philo *philo);
-bool		any_philo_dead(t_philo *philo);
 
 // Util functions
 void		print(t_philo *philo, char *msg);

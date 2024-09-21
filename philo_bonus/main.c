@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:33:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/18 14:12:54 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/21 13:39:59 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,6 @@ int	main(int ac, char **av)
 
 void	clean_up(t_data *data)
 {
-	int	i;
-	int	n;
-
-	i = 0;
-	n = data->nbr_philos;
 	free(data->philos);
 	sem_close(data->forks_sem);
 	sem_close(data->print_sem);

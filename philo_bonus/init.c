@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/21 12:00:59 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/21 16:15:47 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 // This function will initialize the variables in the data struct
 // by drawing from the command line arguments.
+// The forks, print and death semaphores are necessary to synchronize
+// shared resources and communicate across multiple philosopher processes.
+// The meal semaphore functions more like a local mutex to synchronize
+// access between the death monitoring thread and the philosopher child
+// process to their shared meal variables.
+// Only the death semaphore is designed to be locked from the start.
 // sem_open requires a semaphore name to enable communication between
 // different processes becauses processes do not share the same
 // memory space.
@@ -29,18 +35,16 @@ int	data_init(t_data *data, char **av)
 		data->nbr_meals = ft_atoi(av[5]);
 	else
 		data->nbr_meals = -1;
-	data->dead_philo = false;
-	data->stop_simulation = false;
 	if (malloc_philos(data))
 		return (-1);
 	data->forks_sem = sem_open("/forks", O_CREAT, 0644, data->nbr_philos);
 	data->print_sem = sem_open("/print", O_CREAT, 0644, 1);
 	data->meal_sem = sem_open("/meal", O_CREAT, 0644, 1);
-	data->death_sem = sem_open("/death", O_CREAT, 0644, 1);
+	data->death_sem = sem_open("/death", O_CREAT, 0644, 0);
 	return (0);
 }
 
-// The philosopher structs and fork mutexes have to be malloc'd because
+// The philosopher structs have to be malloc'd because
 // the number of philosophers is only known at runtime.
 int	malloc_philos(t_data *data)
 {
@@ -70,58 +74,4 @@ void	philo_init(t_data *data)
 		data->philos[i].meals_eaten = 0;
 		i++;
 	}
-}
-
-// This function will initialize the simulation start time and
-// each philosopher's last_meal time (which should be the start
-// of the simulation).
-// It will fork a child process for each philosopher.
-// Each child process will have its own memory space.
-// waitpid will wait for each child to finish.
-int	run_simulation(t_data *data)
-{
-	int		i;
-	pid_t	*philos_pid;
-
-	philos_pid = malloc(data->nbr_philos * sizeof(pid_t));
-	if (!philos_pid)
-		return (-1);
-	data->start_time = timestamp();
-	i = 0;
-	while (i < data->nbr_philos)
-	{
-		data->philos[i].last_meal = data->start_time;
-		fork_philos(data, i, philos_pid);
-		i++;
-	}
-	i = 0;
-	while (i < data->nbr_philos)
-	{
-		waitpid(philos_pid[i], NULL, 0);
-		i++;
-	}
-	free(philos_pid);
-	return (0);
-}
-
-// This function forks the process for each philosopher.
-// The child process created will run the philo_routine function.
-// exit(0) is necessary to cleanly terminate the child.
-// The parent process will keep track of all the children pid
-// with the help of an array.
-// If an error occurs, the program will exit with status 1.
-void	fork_philos(t_data *data, int i, pid_t *philos_pid)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == 0)
-	{
-		philo_routine(&data->philos[i]);
-		exit(0);
-	}
-	else if (pid > 0)
-		philos_pid[i] = pid;
-	else
-		exit(1);
 }

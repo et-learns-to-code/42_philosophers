@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/21 10:59:29 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/21 15:30:22 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	*philo_routine(t_philo *philo)
 		return ((void *)-1);
 	if (philo->id % 2 == 0)
 		ft_usleep(10);
-	while (!(any_philo_dead(philo)))
+	while (1)
 	{
 		if (philo->data->nbr_philos == 1)
 		{
