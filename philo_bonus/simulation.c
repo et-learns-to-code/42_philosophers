@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 16:15:02 by etien             #+#    #+#             */
-/*   Updated: 2024/09/23 14:59:39 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/23 16:55:08 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,14 @@ void	recover_philos(t_data *data, pid_t *philos_pid)
 	}
 }
 
+// This function is run by the fullness monitor.
+// It will keep track of the number of full philosophers by waiting for
+// the full semaphore to be posted in the child processes then increasing
+// the count. After every increase of the count, the monitor sleeps
+// for the duration of the eating time. This will ensure that the eating
+// status will always have enough time to be printed before
+// the death semaphore is posted which will trigger the termination of the
+// child processes.
 void	*check_philos_full(void *arg)
 {
 	t_data	*data;
@@ -109,8 +117,8 @@ void	*check_philos_full(void *arg)
 			break ;
 		sem_wait(data->full_sem);
 		full_philos++;
+		ft_usleep(data->time_to_eat + 10);
 	}
-	ft_usleep(data->time_to_eat + 10);
 	sem_post(data->death_sem);
 	return (NULL);
 }
