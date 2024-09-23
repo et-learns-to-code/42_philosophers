@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 16:15:02 by etien             #+#    #+#             */
-/*   Updated: 2024/09/23 16:55:08 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/23 18:07:15 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	recover_philos(t_data *data, pid_t *philos_pid)
 // the count. After every increase of the count, the monitor sleeps
 // for the duration of the eating time. This will ensure that the eating
 // status will always have enough time to be printed before
-// the death semaphore is posted which will trigger the termination of the
+// the death semaphore is posted, which will trigger the termination of the
 // child processes.
 void	*check_philos_full(void *arg)
 {
@@ -118,7 +118,8 @@ void	*check_philos_full(void *arg)
 		sem_wait(data->full_sem);
 		full_philos++;
 		ft_usleep(data->time_to_eat + 10);
+		if (full_philos == data->nbr_philos)
+			sem_post(data->death_sem);
 	}
-	sem_post(data->death_sem);
 	return (NULL);
 }
