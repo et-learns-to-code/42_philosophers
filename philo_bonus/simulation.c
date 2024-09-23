@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 16:15:02 by etien             #+#    #+#             */
-/*   Updated: 2024/09/23 11:51:14 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/23 14:59:39 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,12 @@ int	run_simulation(t_data *data)
 		i++;
 	}
 	if (pthread_create(&fullness_monitor, NULL, check_philos_full, data))
-		return ;
-	pthread_join(fullness_monitor, NULL);
+		return (-1);
 	sem_wait(data->death_sem);
+	sem_wait(data->terminate_sem);
+	data->end_simulation = true;
+	sem_post(data->terminate_sem);
+	pthread_join(fullness_monitor, NULL);
 	recover_philos(data, philos_pid);
 	free(philos_pid);
 	return (0);
@@ -102,9 +105,12 @@ void	*check_philos_full(void *arg)
 	full_philos = 0;
 	while (full_philos < data->nbr_philos)
 	{
+		if (any_philo_dead(data))
+			break ;
 		sem_wait(data->full_sem);
 		full_philos++;
 	}
+	ft_usleep(data->time_to_eat + 10);
 	sem_post(data->death_sem);
 	return (NULL);
 }

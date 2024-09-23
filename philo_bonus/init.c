@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/23 11:34:41 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/23 15:53:23 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 // This function will initialize the variables in the data struct
 // by drawing from the command line arguments.
-// The forks, print and death semaphores are necessary to synchronize
+// The forks, print, death and full semaphores are necessary to synchronize
 // shared resources and communicate across multiple philosopher processes.
 // The meal semaphore functions more like a local mutex to synchronize
 // access between the death monitoring thread and the philosopher child
 // process to their shared meal variables.
-// Only the death semaphore is designed to be locked from the start.
+// Only the death and full semaphores are designed to be locked from the start.
 // sem_open requires a semaphore name to enable communication between
 // different processes becauses processes do not share the same
 // memory space.
@@ -35,13 +35,16 @@ int	data_init(t_data *data, char **av)
 		data->nbr_meals = ft_atoi(av[5]);
 	else
 		data->nbr_meals = -1;
+	data->end_simulation = false;
 	if (malloc_philos(data))
 		return (-1);
+	unlink_semaphores();
 	data->forks_sem = sem_open("/forks", O_CREAT, 0644, data->nbr_philos);
 	data->print_sem = sem_open("/print", O_CREAT, 0644, 1);
 	data->meal_sem = sem_open("/meal", O_CREAT, 0644, 1);
 	data->death_sem = sem_open("/death", O_CREAT, 0644, 0);
 	data->full_sem = sem_open("/full", O_CREAT, 0644, 0);
+	data->terminate_sem = sem_open("/terminate", O_CREAT, 0644, 1);
 	return (0);
 }
 
@@ -56,6 +59,19 @@ int	malloc_philos(t_data *data)
 	if (!data->philos)
 		return (-1);
 	return (0);
+}
+
+// This function is necessary to clean up the named semaphores persisting
+// in the system if the program was interrupted with CTRL-C.
+// Not cleaning up the semaphores will lead to undefined behaviour.
+void	unlink_semaphores(void)
+{
+	sem_unlink("/forks");
+	sem_unlink("/print");
+	sem_unlink("/meal");
+	sem_unlink("/death");
+	sem_unlink("/full");
+	sem_unlink("/terminate");
 }
 
 // This function will initialize the variables in all the philo structs.

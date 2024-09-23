@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/23 11:32:55 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/23 14:25:38 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,14 @@ typedef struct s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				nbr_meals;
+	bool			end_simulation;
 	t_philo			*philos;
 	sem_t			*forks_sem;
 	sem_t			*print_sem;
 	sem_t			*meal_sem;
 	sem_t			*death_sem;
 	sem_t			*full_sem;
+	sem_t			*terminate_sem;
 	long long		start_time;
 }	t_data;
 
@@ -77,12 +79,14 @@ bool		invalid_args(char **av);
 // Initialization functions
 int			data_init(t_data *data, char **av);
 int			malloc_philos(t_data *data);
+void		unlink_semaphores(void);
 void		philo_init(t_data *data);
 
 // Simulation start and end functions
 int			run_simulation(t_data *data);
 void		fork_philos(t_data *data, int i, pid_t *philos_pid);
 void		recover_philos(t_data *data, pid_t *philos_pid);
+void		*check_philos_full(void *arg);
 
 // Philosopher routine function
 void		*philo_routine(t_philo *philo);
@@ -96,6 +100,7 @@ void		philo_thinks(t_philo *philo);
 
 // Death checking functions
 void		*check_philo_death(void *arg);
+bool		any_philo_dead(t_data *data);
 
 // Util functions
 void		print(t_philo *philo, char *msg);
