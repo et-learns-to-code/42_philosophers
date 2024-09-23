@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/21 15:30:22 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/23 11:25:18 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@
 // A special check will sleep and terminate the routine if there is only
 // one philosopher since he will have only one fork and will be unable to eat.
 // Once a philosopher is full (checked by philo_eats_and_check_full),
-// he will end his routine. The philosopher will only repeat his routine so
-// long as the shared dead_philo flag has not been marked as true.
+// he will end his routine.
 void	*philo_routine(t_philo *philo)
 {
 	pthread_t	death_monitor;

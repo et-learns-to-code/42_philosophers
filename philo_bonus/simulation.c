@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 16:15:02 by etien             #+#    #+#             */
-/*   Updated: 2024/09/21 16:33:15 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/23 11:51:14 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@
 // It will then signal and wait for the child processes to terminate.
 int	run_simulation(t_data *data)
 {
-	int		i;
-	pid_t	*philos_pid;
+	int			i;
+	pid_t		*philos_pid;
+	pthread_t	fullness_monitor;
 
 	philos_pid = malloc(data->nbr_philos * sizeof(pid_t));
 	if (!philos_pid)
@@ -36,6 +37,9 @@ int	run_simulation(t_data *data)
 		fork_philos(data, i, philos_pid);
 		i++;
 	}
+	if (pthread_create(&fullness_monitor, NULL, check_philos_full, data))
+		return ;
+	pthread_join(fullness_monitor, NULL);
 	sem_wait(data->death_sem);
 	recover_philos(data, philos_pid);
 	free(philos_pid);
@@ -87,4 +91,20 @@ void	recover_philos(t_data *data, pid_t *philos_pid)
 		waitpid(philos_pid[i], NULL, 0);
 		i++;
 	}
+}
+
+void	*check_philos_full(void *arg)
+{
+	t_data	*data;
+	int		full_philos;
+
+	data = (t_data *)arg;
+	full_philos = 0;
+	while (full_philos < data->nbr_philos)
+	{
+		sem_wait(data->full_sem);
+		full_philos++;
+	}
+	sem_post(data->death_sem);
+	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:19:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/18 14:18:29 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/23 11:44:06 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ bool	philo_eats_and_check_full(t_philo *philo)
 
 // Once the philosopher is successful in taking the forks,
 // the forks taken and eating message will be printed for him.
-// The meal mutex will be locked and the philosopher's last meal timestamp
-// and meals eaten count will be updated. The meal mutex will be unlocked.
+// The meal semaphore will be decreased and the philosopher's last meal timestamp
+// and meals eaten count will be updated. The meal semaphore will be increased.
 // The thread will then sleep for the specified eating time.
 // In the subject, time_to_die is measured from the "beginning of their
 // last meal", so last_meal timestamp is updated before making
@@ -49,12 +49,14 @@ void	philo_is_eating(t_philo *philo)
 }
 
 // This function will check whether the philosopher is full
-// by accessing the meals_eaten variable through the meal mutex.
+// by accessing the meals_eaten variable through the meal semaphore.
+// If the philosopher is full, the full semaphore will be posted.
 bool	philo_is_full(t_philo *philo)
 {
 	sem_wait(philo->data->meal_sem);
 	if (philo->meals_eaten == philo->data->nbr_meals)
 	{
+		sem_post(philo->data->full_sem);
 		sem_post(philo->data->meal_sem);
 		return (true);
 	}

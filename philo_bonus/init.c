@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/21 16:15:47 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/23 11:34:41 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	data_init(t_data *data, char **av)
 	data->print_sem = sem_open("/print", O_CREAT, 0644, 1);
 	data->meal_sem = sem_open("/meal", O_CREAT, 0644, 1);
 	data->death_sem = sem_open("/death", O_CREAT, 0644, 0);
+	data->full_sem = sem_open("/full", O_CREAT, 0644, 0);
 	return (0);
 }
 

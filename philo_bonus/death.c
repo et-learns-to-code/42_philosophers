@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:36:06 by etien             #+#    #+#             */
-/*   Updated: 2024/09/21 16:59:46 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/23 10:47:25 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	*check_philo_death(void *arg)
 	philo = (t_philo *)arg;
 	time_to_die = philo->data->time_to_die;
 	ft_usleep(time_to_die);
-	while (1)
+	while (!philo_is_full(philo))
 	{
 		sem_wait(philo->data->meal_sem);
 		if (timestamp() - philo->last_meal > time_to_die)

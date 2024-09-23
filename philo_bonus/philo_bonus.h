@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/21 16:25:44 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/23 11:32:55 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_data
 	sem_t			*print_sem;
 	sem_t			*meal_sem;
 	sem_t			*death_sem;
+	sem_t			*full_sem;
 	long long		start_time;
 }	t_data;
 
