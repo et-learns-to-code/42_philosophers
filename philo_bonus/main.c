@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:33:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/23 13:53:09 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/24 10:39:18 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,14 @@ int	main(int ac, char **av)
 	return (0);
 }
 
+// The clean up function will be called in the parent process
+// but also every single child process before it exits.
+// This is because each child process will duplicate the malloc'd
+// data and the named semaphores. Strictly speaking, the malloc'd
+// data is copied-on-write, meaning that the child duplicates the
+// memory only if it modifies its contents. For our purposes, the
+// memory is duplicated because each philosopher updates its own
+// meal variables.
 void	clean_up(t_data *data)
 {
 	free(data->philos);

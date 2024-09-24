@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 16:15:02 by etien             #+#    #+#             */
-/*   Updated: 2024/09/23 18:07:15 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/24 10:34:39 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	fork_philos(t_data *data, int i, pid_t *philos_pid)
 	if (pid == 0)
 	{
 		philo_routine(&data->philos[i]);
+		clean_up(data);
 		exit(0);
 	}
 	else if (pid > 0)
