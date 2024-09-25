@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/23 14:25:38 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/25 13:40:42 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,6 @@ typedef struct s_data
 	sem_t			*forks_sem;
 	sem_t			*print_sem;
 	sem_t			*meal_sem;
-	sem_t			*death_sem;
-	sem_t			*full_sem;
-	sem_t			*terminate_sem;
 	long long		start_time;
 }	t_data;
 
@@ -86,7 +83,6 @@ void		philo_init(t_data *data);
 int			run_simulation(t_data *data);
 void		fork_philos(t_data *data, int i, pid_t *philos_pid);
 void		recover_philos(t_data *data, pid_t *philos_pid);
-void		*check_philos_full(void *arg);
 
 // Philosopher routine function
 void		*philo_routine(t_philo *philo);
@@ -100,7 +96,6 @@ void		philo_thinks(t_philo *philo);
 
 // Death checking functions
 void		*check_philo_death(void *arg);
-bool		any_philo_dead(t_data *data);
 
 // Util functions
 void		print(t_philo *philo, char *msg);

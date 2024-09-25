@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/23 15:53:23 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/25 13:45:16 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,13 @@
 
 // This function will initialize the variables in the data struct
 // by drawing from the command line arguments.
-// The forks, print, death and full semaphores are necessary to synchronize
+// The forks and print semaphores are necessary to synchronize
 // shared resources and communicate across multiple philosopher processes.
 // The meal semaphore functions more like a local mutex to synchronize
 // access between the death monitoring thread and the philosopher child
 // process to their shared meal variables.
-// Only the death and full semaphores are designed to be locked from the start.
 // sem_open requires a semaphore name to enable communication between
-// different processes becauses processes do not share the same
-// memory space.
+// different processes becauses processes do not share the same memory space.
 // 0644 permissions enables read and write for owner while others can
 // only read - often the default setting to protect shared resources.
 int	data_init(t_data *data, char **av)
@@ -42,9 +40,6 @@ int	data_init(t_data *data, char **av)
 	data->forks_sem = sem_open("/forks", O_CREAT, 0644, data->nbr_philos);
 	data->print_sem = sem_open("/print", O_CREAT, 0644, 1);
 	data->meal_sem = sem_open("/meal", O_CREAT, 0644, 1);
-	data->death_sem = sem_open("/death", O_CREAT, 0644, 0);
-	data->full_sem = sem_open("/full", O_CREAT, 0644, 0);
-	data->terminate_sem = sem_open("/terminate", O_CREAT, 0644, 1);
 	return (0);
 }
 
@@ -69,9 +64,6 @@ void	unlink_semaphores(void)
 	sem_unlink("/forks");
 	sem_unlink("/print");
 	sem_unlink("/meal");
-	sem_unlink("/death");
-	sem_unlink("/full");
-	sem_unlink("/terminate");
 }
 
 // This function will initialize the variables in all the philo structs.

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:36:06 by etien             #+#    #+#             */
-/*   Updated: 2024/09/24 10:29:46 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/25 13:38:41 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,10 @@ void	*check_philo_death(void *arg)
 			sem_wait(philo->data->print_sem);
 			printf("%lld %i %s", timestamp() - philo->data->start_time,
 				philo->id, DIED);
-			sem_post(philo->data->death_sem);
 			exit(1);
 		}
 		sem_post(philo->data->meal_sem);
 		ft_usleep(2);
 	}
 	return (NULL);
-}
-
-// This function will check the dead_philo boolean so that the fullness monitor
-// knows to terminate if philosophers are full before any one of them can die.
-bool	any_philo_dead(t_data *data)
-{
-	bool	end_simulation;
-
-	sem_wait(data->terminate_sem);
-	end_simulation = data->end_simulation;
-	sem_post(data->terminate_sem);
-	return (end_simulation);
 }

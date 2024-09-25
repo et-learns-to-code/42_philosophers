@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:19:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/23 14:42:10 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/25 13:40:11 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ bool	philo_is_full(t_philo *philo)
 	sem_wait(philo->data->meal_sem);
 	if (philo->meals_eaten == philo->data->nbr_meals)
 	{
-		sem_post(philo->data->full_sem);
 		sem_post(philo->data->meal_sem);
 		return (true);
 	}

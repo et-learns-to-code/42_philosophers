@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 16:15:02 by etien             #+#    #+#             */
-/*   Updated: 2024/09/24 10:34:39 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/25 13:43:43 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int	run_simulation(t_data *data)
 {
 	int			i;
 	pid_t		*philos_pid;
-	pthread_t	fullness_monitor;
 
 	philos_pid = malloc(data->nbr_philos * sizeof(pid_t));
 	if (!philos_pid)
@@ -37,13 +36,6 @@ int	run_simulation(t_data *data)
 		fork_philos(data, i, philos_pid);
 		i++;
 	}
-	if (pthread_create(&fullness_monitor, NULL, check_philos_full, data))
-		return (-1);
-	sem_wait(data->death_sem);
-	sem_wait(data->terminate_sem);
-	data->end_simulation = true;
-	sem_post(data->terminate_sem);
-	pthread_join(fullness_monitor, NULL);
 	recover_philos(data, philos_pid);
 	free(philos_pid);
 	return (0);
@@ -82,11 +74,22 @@ void	fork_philos(t_data *data, int i, pid_t *philos_pid)
 void	recover_philos(t_data *data, pid_t *philos_pid)
 {
 	int	i;
+	int	exit_code;
 
 	i = 0;
 	while (i < data->nbr_philos)
 	{
-		kill(philos_pid[i], SIGTERM);
+		waitpid(-1, &exit_code, 0);
+		if (exit_code != 0)
+		{
+			i = 0;
+			while (i < data->nbr_philos)
+			{
+				kill(philos_pid[i], SIGTERM);
+				i++;
+			}
+			break ;
+		}
 		i++;
 	}
 	i = 0;
@@ -95,32 +98,4 @@ void	recover_philos(t_data *data, pid_t *philos_pid)
 		waitpid(philos_pid[i], NULL, 0);
 		i++;
 	}
-}
-
-// This function is run by the fullness monitor.
-// It will keep track of the number of full philosophers by waiting for
-// the full semaphore to be posted in the child processes then increasing
-// the count. After every increase of the count, the monitor sleeps
-// for the duration of the eating time. This will ensure that the eating
-// status will always have enough time to be printed before
-// the death semaphore is posted, which will trigger the termination of the
-// child processes.
-void	*check_philos_full(void *arg)
-{
-	t_data	*data;
-	int		full_philos;
-
-	data = (t_data *)arg;
-	full_philos = 0;
-	while (full_philos < data->nbr_philos)
-	{
-		if (any_philo_dead(data))
-			break ;
-		sem_wait(data->full_sem);
-		full_philos++;
-		ft_usleep(data->time_to_eat + 10);
-		if (full_philos == data->nbr_philos)
-			sem_post(data->death_sem);
-	}
-	return (NULL);
 }
