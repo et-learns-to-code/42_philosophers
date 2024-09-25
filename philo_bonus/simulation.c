@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 16:15:02 by etien             #+#    #+#             */
-/*   Updated: 2024/09/25 13:43:43 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/25 16:14:55 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	fork_philos(t_data *data, int i, pid_t *philos_pid)
 	else if (pid > 0)
 		philos_pid[i] = pid;
 	else
-		exit(1);
+		exit(-1);
 }
 
 // This function will signal for all the child processes to terminate
