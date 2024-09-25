@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:33:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/25 13:48:37 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/25 17:47:11 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	main(int ac, char **av)
 	philo_init(data);
 	run_simulation(data);
 	clean_up(data);
-	free(data);
 	return (0);
 }
 
@@ -54,4 +53,5 @@ void	clean_up(t_data *data)
 	sem_close(data->print_sem);
 	sem_close(data->meal_sem);
 	unlink_semaphores();
+	free(data);
 }
