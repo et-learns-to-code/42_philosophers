@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:36:06 by etien             #+#    #+#             */
-/*   Updated: 2024/09/25 17:48:13 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/26 13:06:32 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	*check_philo_death(void *arg)
 			sem_wait(philo->data->print_sem);
 			printf("%lld %i %s", timestamp() - philo->data->start_time,
 				philo->id, DIED);
-			clean_up(philo->data);
 			exit(1);
 		}
 		sem_post(philo->data->meal_sem);

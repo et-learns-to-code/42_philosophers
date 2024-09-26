@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/25 17:12:31 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/26 13:06:40 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,7 @@ void	*philo_routine(t_philo *philo)
 			break ;
 		}
 		if (philo_eats_and_check_full(philo))
-		{
-			clean_up(philo->data);
 			exit(0);
-		}
 		philo_sleeps(philo);
 		philo_thinks(philo);
 	}
