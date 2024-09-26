@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:36:06 by etien             #+#    #+#             */
-/*   Updated: 2024/09/26 13:06:32 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/26 17:47:18 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,16 @@ void	*check_philo_death(void *arg)
 	ft_usleep(time_to_die);
 	while (!philo_is_full(philo))
 	{
+		struct timeval	tv;
+
+		gettimeofday(&tv, NULL);
+		int timestamp = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 		sem_wait(philo->data->meal_sem);
-		if (timestamp() - philo->last_meal > time_to_die)
+		if (timestamp - philo->last_meal > time_to_die)
 		{
 			sem_post(philo->data->meal_sem);
 			sem_wait(philo->data->print_sem);
-			printf("%lld %i %s", timestamp() - philo->data->start_time,
+			printf("%lld %i %s", timestamp - philo->data->start_time,
 				philo->id, DIED);
 			exit(1);
 		}

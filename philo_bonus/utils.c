@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:10:42 by etien             #+#    #+#             */
-/*   Updated: 2024/09/23 14:05:41 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/26 17:36:39 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@
 void	print(t_philo *philo, char *msg)
 {
 	sem_wait(philo->data->print_sem);
-	printf("%lld %i %s", timestamp() - philo->data->start_time,
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	int timestamp = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	printf("%lld %i %s", timestamp - philo->data->start_time,
 		philo->id, msg);
 	sem_post(philo->data->print_sem);
 }

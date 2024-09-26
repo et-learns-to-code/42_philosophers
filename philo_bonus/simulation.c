@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 16:15:02 by etien             #+#    #+#             */
-/*   Updated: 2024/09/25 17:47:26 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/26 17:36:32 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,11 @@ int	run_simulation(t_data *data)
 	philos_pid = malloc(data->nbr_philos * sizeof(pid_t));
 	if (!philos_pid)
 		return (-1);
-	data->start_time = timestamp();
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	int timestamp = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	data->start_time = timestamp;
 	i = 0;
 	while (i < data->nbr_philos)
 	{

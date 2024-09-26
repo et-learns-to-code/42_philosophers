@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:48:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/18 11:10:35 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/26 17:35:48 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@
 // creating the timestamp.
 long long	timestamp(void)
 {
-	struct timeval	tv;
+	// struct timeval	tv;
 
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	// gettimeofday(&tv, NULL);
+	// return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	return 1;
 }
 
 // This function adapts the original usleep function to make the
@@ -40,10 +41,19 @@ long long	timestamp(void)
 void	ft_usleep(int ms)
 {
 	long long	start_time;
+	struct timeval	tv;
 
-	start_time = timestamp();
+	gettimeofday(&tv, NULL);
+	int timestamp = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	// return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	start_time = timestamp;
 	if (ms > 1000)
 		usleep((ms - 1) * 1000);
-	while (timestamp() - start_time < ms)
+	gettimeofday(&tv, NULL);
+	while (timestamp - start_time < ms)
+	{
 		usleep(100);
+		gettimeofday(&tv, NULL);
+		timestamp = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	}
 }
