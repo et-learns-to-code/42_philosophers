@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:19:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/25 13:40:11 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/26 14:57:31 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ bool	philo_eats_and_check_full(t_philo *philo)
 // the thread sleep.
 void	philo_is_eating(t_philo *philo)
 {
+	sem_wait(philo->data->meal_sem);
 	print(philo, TAKEN_FORK);
 	print(philo, TAKEN_FORK);
 	print(philo, EAT);
-	sem_wait(philo->data->meal_sem);
 	philo->last_meal = timestamp();
 	philo->meals_eaten++;
 	sem_post(philo->data->meal_sem);
@@ -54,14 +54,12 @@ void	philo_is_eating(t_philo *philo)
 // If the philosopher is full, the full semaphore will be posted.
 bool	philo_is_full(t_philo *philo)
 {
+	bool	is_full;
+
 	sem_wait(philo->data->meal_sem);
-	if (philo->meals_eaten == philo->data->nbr_meals)
-	{
-		sem_post(philo->data->meal_sem);
-		return (true);
-	}
+	is_full = (philo->meals_eaten == philo->data->nbr_meals);
 	sem_post(philo->data->meal_sem);
-	return (false);
+	return (is_full);
 }
 
 // The sleeping message will be printed for the philosopher.
