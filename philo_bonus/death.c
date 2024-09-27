@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:36:06 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 11:41:38 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 12:27:29 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,34 +28,24 @@ void	*check_philo_death(void *arg)
 {
 	t_philo			*philo;
 	int				time_to_die;
+	struct timeval	tv;
+	long long		timestamp;
 
 	philo = (t_philo *)arg;
 	time_to_die = philo->data->time_to_die;
 	ft_usleep(time_to_die);
 	while (1)
 	{
-		sem_wait(philo->data->meal_sem);
-		check_death_condition(philo, time_to_die);
-		sem_post(philo->data->meal_sem);
+		gettimeofday(&tv, NULL);
+		timestamp = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+		if (timestamp - philo->last_meal > time_to_die)
+		{
+			sem_wait(philo->data->print_sem);
+			printf("%lld %i %s", timestamp - philo->data->start_time,
+				philo->id, DIED);
+			exit(1);
+		}
 		ft_usleep(2);
 	}
 	return (NULL);
 }
-
-void	check_death_condition(t_philo *philo, int time_to_die)
-{
-	struct timeval	tv;
-	long long		timestamp;
-
-	gettimeofday(&tv, NULL);
-	timestamp = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-	if (timestamp - philo->last_meal > time_to_die)
-	{
-		sem_post(philo->data->meal_sem);
-		sem_wait(philo->data->print_sem);
-		printf("%lld %i %s", timestamp - philo->data->start_time,
-			philo->id, DIED);
-		exit(1);
-	}
-}
-

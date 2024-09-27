@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:19:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 12:17:15 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 12:23:37 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ void	philo_is_eating(t_philo *philo)
 	struct timeval	tv;
 	long long		timestamp;
 
+	sem_wait(philo->data->meal_sem);
 	print(philo, TAKEN_FORK);
 	print(philo, TAKEN_FORK);
 	print(philo, EAT);
 	gettimeofday(&tv, NULL);
 	timestamp = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-	sem_wait(philo->data->meal_sem);
 	philo->last_meal = timestamp;
 	philo->meals_eaten++;
 	sem_post(philo->data->meal_sem);
@@ -61,9 +61,7 @@ bool	philo_is_full(t_philo *philo)
 {
 	bool	is_full;
 
-	sem_wait(philo->data->meal_sem);
 	is_full = (philo->meals_eaten == philo->data->nbr_meals);
-	sem_post(philo->data->meal_sem);
 	return (is_full);
 }
 

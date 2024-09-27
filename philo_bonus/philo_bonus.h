@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 12:17:44 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 12:26:32 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,8 @@ bool		philo_is_full(t_philo *philo);
 void		philo_sleeps(t_philo *philo);
 void		philo_thinks(t_philo *philo);
 
-// Death checking functions
+// Death checking function
 void		*check_philo_death(void *arg);
-void		check_death_condition(t_philo *philo, int time_to_die);
 
 // Util functions
 void		print(t_philo *philo, char *msg);
