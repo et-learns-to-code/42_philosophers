@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 12:36:20 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 13:58:43 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ typedef struct s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				nbr_meals;
-	bool			end_simulation;
 	t_philo			*philos;
 	sem_t			*forks_sem;
 	sem_t			*print_sem;

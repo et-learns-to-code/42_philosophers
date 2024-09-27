@@ -5,7 +5,7 @@ SRC = args_check.c death.c init.c main.c philo_actions.c \
 
 OBJ = ${SRC:.c=.o}
 
-CC = cc -fsanitize=thread -g3
+CC = cc
 CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
 
