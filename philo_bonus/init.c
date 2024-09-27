@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 14:12:19 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 16:21:41 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 // This function will initialize the variables in the data struct
 // by drawing from the command line arguments.
 // The forks, meal and print semaphores are necessary to synchronize
-// shared resources and communicate across multiple philosopher processes.
+// the different philosopher processes.
 // sem_open requires a semaphore name to enable communication between
 // different processes becauses processes do not share the same memory space.
-// This function is necessary to clean up the named semaphores persisting
-// in the system if the program was interrupted with CTRL-C.
+// The named semaphores have to be cleaned up before the start of every new run
+// because they can persist in the system if the program was interrupted.
 // Not cleaning up the semaphores will lead to undefined behaviour.
 // 0644 permissions enables read and write for owner while others can
 // only read - often the default setting to protect shared resources.

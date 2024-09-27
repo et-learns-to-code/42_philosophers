@@ -6,23 +6,22 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:36:06 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 12:27:29 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 16:19:32 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
 // This function is run by the death monitor thread.
-// If a philosopher has died, its corresponding death monitor will
-// post the death semaphore and exit the child process.
 // In the beginning, the thread will sleep until it is close to time_to_die.
 // Once awake, it runs a loop of periodically checking for death status
 // then sleeping for 2ms to conserve CPU resources.
-// When the death condition is detected, exit(1) is called, which will
-// terminate the child process along with its death monitor thread.
+// When the death condition is detected, the death status is printed and
+// exit(1) is called, which will terminate the child process along with
+// its death monitor thread.
 // The subject states that a philosopher's death has to be reported within 10ms.
 // The print semaphore is not increased again with sem_post because the
-// death announcement should be the last statement printed by the program.
+// death status should be the last statement printed by the program.
 // This will prevent the death of other philosophers from being announced.
 void	*check_philo_death(void *arg)
 {

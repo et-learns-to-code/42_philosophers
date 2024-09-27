@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 14:32:36 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 16:33:29 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void		philo_init(t_data *data);
 
 // Simulation start and end functions
 int			run_simulation(t_data *data);
-void		fork_philos(t_data *data, int i, pid_t *philos_pid);
+int			fork_philos(t_data *data, int i, pid_t *philos_pid);
 void		recover_philos(t_data *data, pid_t *philos_pid);
 
 // Philosopher routine function

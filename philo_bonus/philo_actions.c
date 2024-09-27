@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:19:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 12:36:08 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 16:51:37 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,8 @@ bool	philo_eats_and_check_full(t_philo *philo)
 
 // Once the philosopher is successful in taking the forks,
 // the forks taken and eating message will be printed for him.
-// The meal semaphore will be decreased and the philosopher's last meal
-// timestamp and meals eaten count will be updated.
-// The meal semaphore will be increased.
-// The thread will then sleep for the specified eating time.
+// The philosopher's last meal timestamp and meals eaten count will be updated.
+// The process will then sleep for the specified eating time.
 // In the subject, time_to_die is measured from the "beginning of their
 // last meal", so last_meal timestamp is updated before making
 // the thread sleep.
@@ -58,7 +56,7 @@ void	philo_is_eating(t_philo *philo)
 }
 
 // The sleeping message will be printed for the philosopher.
-// The thread will then sleep for the specified sleeping time.
+// The process will then sleep for the specified sleeping time.
 void	philo_sleeps(t_philo *philo)
 {
 	print(philo, SLEEP);

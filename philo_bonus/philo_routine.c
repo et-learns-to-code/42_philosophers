@@ -6,15 +6,16 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/26 13:06:40 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 16:49:26 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-// The death monitor thread is created at the start and rejoined
-// once the philosopher has ended his routine.
-// The routine will follow the sequence of eat > sleep > think.
+// The death monitor thread is created at the start of the child process
+// and immediately detached. The OS will clean up the resources used by
+// the detached thread when the program terminates.
+// The philosopher's routine will follow the sequence of eat > sleep > think.
 // At the start, even-numbered philosophers will be slightly delayed
 // by calling ft_usleep for 10 milliseconds.
 // This will minimize contention for picking up the forks during
@@ -23,7 +24,8 @@
 // A special check will sleep and terminate the routine if there is only
 // one philosopher since he will have only one fork and will be unable to eat.
 // Once a philosopher is full (checked by philo_eats_and_check_full),
-// he will end his routine.
+// he will call exit with status code 0 to terminate both himself and
+// his death monitor thread.
 void	*philo_routine(t_philo *philo)
 {
 	pthread_t	death_monitor;

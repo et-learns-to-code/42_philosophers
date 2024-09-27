@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:33:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 15:11:11 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 16:13:24 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,15 @@ int	main(int ac, char **av)
 	t_data	*data;
 
 	if (incorrect_args(ac, av))
-	{
-		correct_usage();
-		exit(-1);
-	}
+		return (correct_usage(), -1);
 	data = malloc(sizeof(t_data));
 	if (!data)
-		exit(-1);
+		return (-1);
 	data_init(data, av);
 	philo_init(data);
 	run_simulation(data);
 	clean_up(data);
-	exit(0);
+	return (0);
 }
 
 // The clean up function frees
