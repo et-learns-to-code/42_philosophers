@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/25 13:40:42 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 11:15:22 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_data
 	sem_t			*forks_sem;
 	sem_t			*print_sem;
 	sem_t			*meal_sem;
+	sem_t			*eaten_sem;
 	long long		start_time;
 }	t_data;
 
@@ -96,13 +97,13 @@ void		philo_thinks(t_philo *philo);
 
 // Death checking functions
 void		*check_philo_death(void *arg);
+void		check_death_condition(t_philo *philo, int time_to_die);
 
 // Util functions
 void		print(t_philo *philo, char *msg);
 int			ft_atoi(const char *str);
 
-// Time functions
-long long	timestamp(void);
+// Time function
 void		ft_usleep(int ms);
 
 // Clean up function in main.c

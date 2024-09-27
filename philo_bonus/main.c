@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:33:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/25 17:47:11 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 11:24:39 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	clean_up(t_data *data)
 	sem_close(data->forks_sem);
 	sem_close(data->print_sem);
 	sem_close(data->meal_sem);
+	sem_close(data->eaten_sem);
 	unlink_semaphores();
 	free(data);
 }

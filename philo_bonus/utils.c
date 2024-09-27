@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:10:42 by etien             #+#    #+#             */
-/*   Updated: 2024/09/23 14:05:41 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 11:21:52 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,13 @@
 // so that all printing ceases once a philosopher has died.
 void	print(t_philo *philo, char *msg)
 {
+	struct timeval	tv;
+	long long		timestamp;
+
+	gettimeofday(&tv, NULL);
+	timestamp = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 	sem_wait(philo->data->print_sem);
-	printf("%lld %i %s", timestamp() - philo->data->start_time,
+	printf("%lld %i %s", timestamp - philo->data->start_time,
 		philo->id, msg);
 	sem_post(philo->data->print_sem);
 }

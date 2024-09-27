@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/25 13:45:16 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 11:26:16 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	data_init(t_data *data, char **av)
 	data->forks_sem = sem_open("/forks", O_CREAT, 0644, data->nbr_philos);
 	data->print_sem = sem_open("/print", O_CREAT, 0644, 1);
 	data->meal_sem = sem_open("/meal", O_CREAT, 0644, 1);
+	data->eaten_sem = sem_open("/eaten", O_CREAT, 0644, 1);
 	return (0);
 }
 
@@ -64,6 +65,7 @@ void	unlink_semaphores(void)
 	sem_unlink("/forks");
 	sem_unlink("/print");
 	sem_unlink("/meal");
+	sem_unlink("/eaten");
 }
 
 // This function will initialize the variables in all the philo structs.

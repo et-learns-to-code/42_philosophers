@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:19:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/26 14:57:31 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 11:34:23 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,19 @@ bool	philo_eats_and_check_full(t_philo *philo)
 // the thread sleep.
 void	philo_is_eating(t_philo *philo)
 {
-	sem_wait(philo->data->meal_sem);
+	struct timeval	tv;
+	long long		timestamp;
+
 	print(philo, TAKEN_FORK);
 	print(philo, TAKEN_FORK);
 	print(philo, EAT);
-	philo->last_meal = timestamp();
+	gettimeofday(&tv, NULL);
+	timestamp = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	sem_wait(philo->data->meal_sem);
+	sem_wait(philo->data->eaten_sem);
+	philo->last_meal = timestamp;
 	philo->meals_eaten++;
+	sem_post(philo->data->eaten_sem);
 	sem_post(philo->data->meal_sem);
 	ft_usleep(philo->data->time_to_eat);
 }

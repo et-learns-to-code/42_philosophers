@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 16:15:02 by etien             #+#    #+#             */
-/*   Updated: 2024/09/25 17:47:26 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 11:17:11 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,17 @@
 // It will then signal and wait for the child processes to terminate.
 int	run_simulation(t_data *data)
 {
-	int			i;
-	pid_t		*philos_pid;
+	struct timeval	tv;
+	long long		timestamp;
+	int				i;
+	pid_t			*philos_pid;
 
 	philos_pid = malloc(data->nbr_philos * sizeof(pid_t));
 	if (!philos_pid)
 		return (-1);
-	data->start_time = timestamp();
+	gettimeofday(&tv, NULL);
+	timestamp = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	data->start_time = timestamp;
 	i = 0;
 	while (i < data->nbr_philos)
 	{
