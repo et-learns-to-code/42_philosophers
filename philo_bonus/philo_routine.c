@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 10:40:00 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 17:16:31 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 17:50:08 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
 // This will minimize contention for picking up the forks during
 // the first round of eating. From then on, the philosophers will
 // have staggered schedules which will reduce the chances for deadlock.
-// A special check will sleep and terminate the routine if there is only
-// one philosopher since he will have only one fork and will be unable to eat.
+// If there is only one philosopher, the philosopher will be put into
+// an eternal sleep loop until the death monitor terminates it because
+// the philosopher will only have one fork and will be unable to eat.
 // Once a philosopher is full (checked by philo_eats_and_check_full),
 // he will call exit(0) to terminate both himself and his death monitor thread.
 void	*philo_routine(t_philo *philo)
@@ -39,8 +40,8 @@ void	*philo_routine(t_philo *philo)
 	{
 		if (philo->data->nbr_philos == 1)
 		{
-			ft_usleep(philo->data->time_to_die);
-			break ;
+			while (1)
+				ft_usleep(philo->data->time_to_die);
 		}
 		if (philo_eats_and_check_full(philo))
 			exit(0);
