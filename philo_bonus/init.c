@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 17:14:14 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 17:21:28 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 // The start_time variable is initialized in the run_simulation function.
 // The forks, meal and print semaphores are necessary to synchronize
 // the different philosopher processes.
-// sem_open requires a system-wide semaphore name to enable communication between
-// different processes becauses processes do not share the same memory space.
+// sem_open requires a system-wide semaphore name to enable communication
+// between processes because they do not share the same memory space.
 // The named semaphores have to be cleaned up before the start of every new run
 // because they can persist in the system if the program was interrupted.
 // Not cleaning up the semaphores will lead to undefined behaviour.

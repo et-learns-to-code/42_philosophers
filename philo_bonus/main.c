@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:33:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 17:06:32 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 17:21:49 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ void	clean_up(t_data *data)
 {
 	if (data)
 	{
-		if(data->philos)
+		if (data->philos)
 			free(data->philos);
-		if(data->forks_sem)
+		if (data->forks_sem)
 			sem_close(data->forks_sem);
-		if(data->print_sem)
+		if (data->print_sem)
 			sem_close(data->print_sem);
-		if(data->meal_sem)
+		if (data->meal_sem)
 			sem_close(data->meal_sem);
 		sem_unlink("/forks");
 		sem_unlink("/print");
