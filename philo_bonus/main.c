@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:33:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 16:13:24 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 17:06:32 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // This is the main function of the program.
 // It will first check for incorrect arguments.
 // If there are incorrect arguments, it will print the
-// correct usage and exit with status -1.
+// correct usage and return -1.
 // The data and philo structs will be initialized and the
 // simulation will be run.
 // After the simulation terminates, all the previously malloc'd
@@ -36,7 +36,6 @@ int	main(int ac, char **av)
 	return (0);
 }
 
-// The clean up function frees
 void	clean_up(t_data *data)
 {
 	if (data)

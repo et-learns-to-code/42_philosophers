@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:19:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 16:51:37 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 17:04:13 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 // the forks semaphore.
 // After the philosopher is done eating, the forks semaphore will
 // be increased to allow the next philosopher to pick up the forks.
-// Finally, a boolean will be returned to indicate
-// whether the philosopher is full after having his meal.
+// Finally, a boolean will be returned to indicate whether the philosopher
+// is full after having his meal.
 bool	philo_eats_and_check_full(t_philo *philo)
 {
 	bool	is_full;
@@ -34,10 +34,13 @@ bool	philo_eats_and_check_full(t_philo *philo)
 // Once the philosopher is successful in taking the forks,
 // the forks taken and eating message will be printed for him.
 // The philosopher's last meal timestamp and meals eaten count will be updated.
+// The only function of the meal semaphore is to group together the eating
+// messages of a single philosopher, and prevent the messages from
+// other philosophers from interleaving with them.
 // The process will then sleep for the specified eating time.
 // In the subject, time_to_die is measured from the "beginning of their
-// last meal", so last_meal timestamp is updated before making
-// the thread sleep.
+// last meal", so the last_meal timestamp is updated before making
+// the process sleep.
 void	philo_is_eating(t_philo *philo)
 {
 	struct timeval	tv;

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 16:21:41 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 17:14:14 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,16 @@
 
 // This function will initialize the variables in the data struct
 // by drawing from the command line arguments.
+// The start_time variable is initialized in the run_simulation function.
 // The forks, meal and print semaphores are necessary to synchronize
 // the different philosopher processes.
-// sem_open requires a semaphore name to enable communication between
+// sem_open requires a system-wide semaphore name to enable communication between
 // different processes becauses processes do not share the same memory space.
 // The named semaphores have to be cleaned up before the start of every new run
 // because they can persist in the system if the program was interrupted.
 // Not cleaning up the semaphores will lead to undefined behaviour.
-// 0644 permissions enables read and write for owner while others can
-// only read - often the default setting to protect shared resources.
+// 0644 permissions enable read and write for owner while others can
+// only read. This is often the default setting to protect shared resources.
 int	data_init(t_data *data, char **av)
 {
 	data->nbr_philos = ft_atoi(av[1]);
@@ -44,7 +45,7 @@ int	data_init(t_data *data, char **av)
 	return (0);
 }
 
-// The philosopher structs have to be malloc'd because
+// The philosopher struct array has to be malloc'd because
 // the number of philosophers is only known at runtime.
 int	malloc_philos(t_data *data)
 {
@@ -58,8 +59,8 @@ int	malloc_philos(t_data *data)
 }
 
 // This function will initialize the variables in all the philo structs.
-// last_meal will be initialized to synchronize with the simulation
-// start time in the run_simulation function.
+// The last_meal variable will be initialized to the simulation start time
+// in the run_simulation function.
 void	philo_init(t_data *data)
 {
 	int	i;
