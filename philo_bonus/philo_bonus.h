@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 11:15:22 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 12:17:44 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,16 @@ typedef struct s_data
 	sem_t			*forks_sem;
 	sem_t			*print_sem;
 	sem_t			*meal_sem;
-	sem_t			*eaten_sem;
 	long long		start_time;
 }	t_data;
 
 // variables specific to a single philosopher thread
 typedef struct s_philo
 {
-	t_data			*data;
-	int				id;
-	int				meals_eaten;
-	long long		last_meal;
+	t_data					*data;
+	int						id;
+	_Atomic int				meals_eaten;
+	_Atomic long long		last_meal;
 }	t_philo;
 
 // Argument checking functions
