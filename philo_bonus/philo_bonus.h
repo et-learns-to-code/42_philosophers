@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 13:58:43 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 14:32:36 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 
 typedef struct s_philo	t_philo;
 
-// shared variables among all philosopher threads
+// every forked process will get a copy of these variables
 typedef struct s_data
 {
 	int				nbr_philos;
@@ -57,7 +57,10 @@ typedef struct s_data
 	long long		start_time;
 }	t_data;
 
-// variables specific to a single philosopher thread
+// meal variables have to be atomic to avoid data race
+// An atomic variable refers to a variable that is accessed atomically,
+// meaning that its operations (like read, write, increment) are indivisible
+// and cannot be interrupted by other threads or processes.
 typedef struct s_philo
 {
 	t_data					*data;

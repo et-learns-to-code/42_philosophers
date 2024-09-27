@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:10:42 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 11:21:52 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 14:35:59 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 // This function prints out the status message for a given philosopher.
 // It will include the timestamp, philo id and activity message.
-// It is protected behind a
-// The function will check for simulation end conditions before printing
-// so that all printing ceases once a philosopher has died.
+// It is protected behind the print semaphore.
 void	print(t_philo *philo, char *msg)
 {
 	struct timeval	tv;
