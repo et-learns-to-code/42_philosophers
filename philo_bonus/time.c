@@ -6,28 +6,11 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:48:53 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 11:01:17 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 13:45:50 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
-
-// This function will facilitate the calling of the gettimeofday function.
-// gettimeofday will automatically fill in the time data in the
-// timeval struct passed in as a parameter to it.
-// tv.tv_sec = number of seconds elapsed since the Unix epoch
-// tv.tv_usec = number of microseconds elapsed since the last second.
-// * 1000 and / 1000 are to convert to the milliseconds basis
-// required by the simulation.
-// This function will return the sum of the two variables, thereby
-// creating the timestamp.
-// long long	timestamp(void)
-// {
-// 	struct timeval	tv;
-
-// 	gettimeofday(&tv, NULL);
-// 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
-// }
 
 // This function adapts the original usleep function to make the
 // sleep duration more precise.

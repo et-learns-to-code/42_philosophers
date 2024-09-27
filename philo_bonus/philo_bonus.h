@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:15:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 12:26:32 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 12:36:20 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ bool		invalid_args(char **av);
 // Initialization functions
 int			data_init(t_data *data, char **av);
 int			malloc_philos(t_data *data);
-void		unlink_semaphores(void);
 void		philo_init(t_data *data);
 
 // Simulation start and end functions
@@ -90,7 +89,6 @@ void		*philo_routine(t_philo *philo);
 // Philosopher actions functions
 bool		philo_eats_and_check_full(t_philo *philo);
 void		philo_is_eating(t_philo *philo);
-bool		philo_is_full(t_philo *philo);
 void		philo_sleeps(t_philo *philo);
 void		philo_thinks(t_philo *philo);
 

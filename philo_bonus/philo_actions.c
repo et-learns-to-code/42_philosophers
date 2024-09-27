@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:19:05 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 12:23:37 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 12:36:08 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,15 @@
 // whether the philosopher is full after having his meal.
 bool	philo_eats_and_check_full(t_philo *philo)
 {
+	bool	is_full;
+
 	sem_wait(philo->data->forks_sem);
 	sem_wait(philo->data->forks_sem);
 	philo_is_eating(philo);
 	sem_post(philo->data->forks_sem);
 	sem_post(philo->data->forks_sem);
-	return (philo_is_full(philo));
+	is_full = (philo->meals_eaten == philo->data->nbr_meals);
+	return (is_full);
 }
 
 // Once the philosopher is successful in taking the forks,
@@ -52,17 +55,6 @@ void	philo_is_eating(t_philo *philo)
 	philo->meals_eaten++;
 	sem_post(philo->data->meal_sem);
 	ft_usleep(philo->data->time_to_eat);
-}
-
-// This function will check whether the philosopher is full
-// by accessing the meals_eaten variable through the meal semaphore.
-// If the philosopher is full, the full semaphore will be posted.
-bool	philo_is_full(t_philo *philo)
-{
-	bool	is_full;
-
-	is_full = (philo->meals_eaten == philo->data->nbr_meals);
-	return (is_full);
 }
 
 // The sleeping message will be printed for the philosopher.

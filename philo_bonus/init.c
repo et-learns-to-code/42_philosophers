@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:32:35 by etien             #+#    #+#             */
-/*   Updated: 2024/09/27 12:16:52 by etien            ###   ########.fr       */
+/*   Updated: 2024/09/27 12:33:44 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 // process to their shared meal variables.
 // sem_open requires a semaphore name to enable communication between
 // different processes becauses processes do not share the same memory space.
+// This function is necessary to clean up the named semaphores persisting
+// in the system if the program was interrupted with CTRL-C.
+// Not cleaning up the semaphores will lead to undefined behaviour.
 // 0644 permissions enables read and write for owner while others can
 // only read - often the default setting to protect shared resources.
 int	data_init(t_data *data, char **av)
@@ -36,7 +39,9 @@ int	data_init(t_data *data, char **av)
 	data->end_simulation = false;
 	if (malloc_philos(data))
 		return (-1);
-	unlink_semaphores();
+	sem_unlink("/forks");
+	sem_unlink("/print");
+	sem_unlink("/meal");
 	data->forks_sem = sem_open("/forks", O_CREAT, 0644, data->nbr_philos);
 	data->print_sem = sem_open("/print", O_CREAT, 0644, 1);
 	data->meal_sem = sem_open("/meal", O_CREAT, 0644, 1);
@@ -54,16 +59,6 @@ int	malloc_philos(t_data *data)
 	if (!data->philos)
 		return (-1);
 	return (0);
-}
-
-// This function is necessary to clean up the named semaphores persisting
-// in the system if the program was interrupted with CTRL-C.
-// Not cleaning up the semaphores will lead to undefined behaviour.
-void	unlink_semaphores(void)
-{
-	sem_unlink("/forks");
-	sem_unlink("/print");
-	sem_unlink("/meal");
 }
 
 // This function will initialize the variables in all the philo structs.
